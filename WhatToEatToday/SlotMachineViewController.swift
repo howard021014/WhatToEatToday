@@ -18,14 +18,11 @@ class SlotMachineViewController: UIViewController {
         return loadingView
     }()
     
-    private lazy var emptyLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        label.text = "No Recipes Found! \n Please use the + button to add one"
-        label.isHidden = true
-        label.textAlignment = .center
-        return label
+    private lazy var emptyView: EmptyView = {
+        let view = EmptyView(with: "No Recipes Found! \n Please use the + button to add one")
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isHidden = true
+        return view
     }()
     
     private lazy var slotView: UIScrollView = {
@@ -111,14 +108,14 @@ class SlotMachineViewController: UIViewController {
             loadingIndicator.stopAnimating()
             self.items = recipes
             if items.isEmpty {
-                emptyLabel.isHidden = false
+                emptyView.isHidden = false
             } else {
-                emptyLabel.isHidden = true
+                emptyView.isHidden = true
                 addSlotMachineView()
             }
         case .failure(let error):
             loadingIndicator.stopAnimating()
-            emptyLabel.isHidden = false
+            emptyView.isHidden = false
             removeSlotMachineView()
             print("Error fetching from data: \(error.localizedDescription)")
         }
@@ -133,12 +130,12 @@ class SlotMachineViewController: UIViewController {
     }
     
     private func addEmptyLabel() {
-        view.addSubview(emptyLabel)
+        view.addSubview(emptyView)
         NSLayoutConstraint.activate([
-            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            emptyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            emptyView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            emptyView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
     }
     

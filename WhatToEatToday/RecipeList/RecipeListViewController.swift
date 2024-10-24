@@ -15,7 +15,7 @@ class RecipeListViewController: UITableViewController {
     
     let imageCache = NSCache<NSString, UIImage>()
     let loadingIndicator = UIActivityIndicatorView(style: .large)
-    let emptyStateView = UIView()
+    let emptyStateView = EmptyView(with: "No Recipes Found! \n Please use the + button to add one")
 
     let recipeCellName = "RecipeCell"
     let viewModel: RecipeViewModel
@@ -42,7 +42,9 @@ class RecipeListViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.tabBarController?.navigationItem.rightBarButtonItem = self.editButtonItem
+        if !recipes.isEmpty {
+            self.tabBarController?.navigationItem.rightBarButtonItem = self.editButtonItem
+        }
     }
     
     private func setupViewModelBinding() {
@@ -63,7 +65,12 @@ class RecipeListViewController: UITableViewController {
         case .success(let recipes):
             loadingIndicator.stopAnimating()
             self.recipes = recipes
-            self.tableView.reloadData()
+            if recipes.isEmpty {
+                self.tableView.backgroundView = emptyStateView
+            } else {
+                self.tableView.backgroundView = nil
+                self.tableView.reloadData()
+            }
         case .failure(let error):
             print("Error fetching from data: \(error.localizedDescription)")
         }

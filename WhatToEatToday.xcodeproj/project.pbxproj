@@ -21,6 +21,7 @@
 		DC58E6892C645DF900B260D3 /* IngredientCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E6882C645DF900B260D3 /* IngredientCollectionViewCell.swift */; };
 		DC58E68B2C645EAB00B260D3 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E68A2C645EAB00B260D3 /* UIView+Extension.swift */; };
 		DC58E68D2C65AB5300B260D3 /* TextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E68C2C65AB5300B260D3 /* TextFieldDelegate.swift */; };
+		DC5AD05C2CC9E2EB000C785D /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD05B2CC9E2EB000C785D /* EmptyView.swift */; };
 		DCCC12B92BD702FF00BB0D0F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCCC12B82BD702FF00BB0D0F /* AppDelegate.swift */; };
 		DCCC12BB2BD702FF00BB0D0F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCCC12BA2BD702FF00BB0D0F /* SceneDelegate.swift */; };
 		DCCC12BD2BD702FF00BB0D0F /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCCC12BC2BD702FF00BB0D0F /* TabBarViewController.swift */; };
@@ -47,6 +48,7 @@
 		DC58E6882C645DF900B260D3 /* IngredientCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientCollectionViewCell.swift; sourceTree = "<group>"; };
 		DC58E68A2C645EAB00B260D3 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		DC58E68C2C65AB5300B260D3 /* TextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldDelegate.swift; sourceTree = "<group>"; };
+		DC5AD05B2CC9E2EB000C785D /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		DCCC12B52BD702FF00BB0D0F /* WhatToEatToday.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatToEatToday.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCCC12B82BD702FF00BB0D0F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DCCC12BA2BD702FF00BB0D0F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				DC2714222C28CFC3007F54E9 /* CoreDataManager.swift */,
 				DC58E6272C47515D00B260D3 /* GameViewController.swift */,
 				DC58E6772C557AE500B260D3 /* SlotMachineViewController.swift */,
+				DC5AD05B2CC9E2EB000C785D /* EmptyView.swift */,
 				DC2713EC2C28BC53007F54E9 /* Recipes.xcdatamodeld */,
 				DC58E6792C558FF900B260D3 /* ViewModel */,
 				DC2713E92C24C92F007F54E9 /* Model */,
@@ -238,6 +241,7 @@
 			files = (
 				DC58E6832C56E27700B260D3 /* RecipeNotesCell.swift in Sources */,
 				DCCC12CF2BD706DA00BB0D0F /* RecipeCell.swift in Sources */,
+				DC5AD05C2CC9E2EB000C785D /* EmptyView.swift in Sources */,
 				DCCC12D72BDAF9A300BB0D0F /* IngredientCell.swift in Sources */,
 				DC58E68D2C65AB5300B260D3 /* TextFieldDelegate.swift in Sources */,
 				DC58E6852C56E8B800B260D3 /* IngredientsHeaderView.swift in Sources */,
