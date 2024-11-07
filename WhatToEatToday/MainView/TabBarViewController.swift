@@ -9,8 +9,17 @@ import UIKit
 
 class TabBarViewController: UITabBarController {
     
-    let viewModel = RecipeViewModel()
+    let viewModel: RecipeViewModel
+    
+    init(viewModel: RecipeViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     lazy var gameVC: UIViewController = {
 //        let vc = GameViewController()
         let vc = SlotMachineViewController(viewModel: viewModel)

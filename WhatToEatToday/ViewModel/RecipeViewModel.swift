@@ -17,25 +17,40 @@ enum State {
 
 class RecipeViewModel {
     @Published private(set) var state: State = .idle
+    @Published private(set) var shouldShowAddButton = false
+    
+    private var cancellables = Set<AnyCancellable>()
+    let coreDatatService: CoreDataService
+    
+    init(_ coreDataService: CoreDataService) {
+        self.coreDatatService = coreDataService
+    }
     
     func fetchRecipes() {
         state = .loading
-        CoreDataManager.shared.fetchRecipes { result in
-            switch result {
-            case .success(let recipes):
-                DispatchQueue.main.async { [weak self] in
-                    self?.state = .success(recipes)
-                }
-            case .failure(let error):
-                DispatchQueue.main.async { [weak self] in
+        coreDatatService.fetchRecipes()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] result in
+                if case .failure(let error) = result {
                     self?.state = .failure(error)
                 }
+            } receiveValue: { [weak self] recipes in
+                self?.state = .success(recipes)
             }
-        }
+            .store(in: &cancellables)
     }
     
     func addRecipe(name: String, ingredients: [IngredientData], image: UIImage?, notes: String?) {
-        CoreDataManager.shared.saveRecipe(name: name, ingredients: ingredients, image: image?.pngData(), notes: notes)
+        coreDatatService.addRecipe(name: name, ingredients: ingredients, image: image?.pngData(), notes: notes)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] result in
+                if case .failure(let error) = result {
+                    self?.state = .failure(error)
+                }
+            } receiveValue: { [weak self] _ in
+                self?.fetchRecipes()
+            }
+            .store(in: &cancellables)
     }
     
     func addSampleRecipes()  {
@@ -43,6 +58,15 @@ class RecipeViewModel {
     }
     
     func deleteRecipe(_ recipe: Recipe) {
-        CoreDataManager.shared.deleteRecipe(recipe)
+        coreDatatService.delete(recipe: recipe)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] result in
+                if case .failure(let error) = result {
+                    self?.state = .failure(error)
+                }
+            } receiveValue: { [weak self] _ in
+                self?.fetchRecipes()
+            }
+            .store(in: &cancellables)
     }
 }

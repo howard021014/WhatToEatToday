@@ -68,6 +68,9 @@ class SlotMachineViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        
+        // To prevent the large title from collapsing
+        view.addSubview(UIView())
         setupViewModelBinding()
         viewModel.fetchRecipes()
         addLoadingIndicator()
@@ -102,6 +105,7 @@ class SlotMachineViewController: UIViewController {
         case .idle:
             break
         case .loading:
+            emptyView.isHidden = true
             loadingIndicator.startAnimating()
             break
         case .success(let recipes):
@@ -109,6 +113,7 @@ class SlotMachineViewController: UIViewController {
             self.items = recipes
             if items.isEmpty {
                 emptyView.isHidden = false
+                removeSlotMachineView()
             } else {
                 emptyView.isHidden = true
                 addSlotMachineView()
@@ -140,10 +145,7 @@ class SlotMachineViewController: UIViewController {
     }
     
     private func addSlotMachineView() {
-        
-        // To prevent the large title from collapsing
-        view.addSubview(UIView())
-        
+
         view.addSubview(containerView)
         containerView.addSubview(slotView)
         view.addSubview(spinButton)
@@ -261,6 +263,7 @@ class SlotMachineViewController: UIViewController {
     
     private func removeSlotMachineView() {
         containerView.removeFromSuperview()
+        spinButton.removeFromSuperview()
     }
 }
 
