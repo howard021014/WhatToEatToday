@@ -53,10 +53,6 @@ class RecipeViewModel {
             .store(in: &cancellables)
     }
     
-    func addSampleRecipes()  {
-        CoreDataManager.shared.generateDummyData()
-    }
-    
     func deleteRecipe(_ recipe: Recipe) {
         coreDatatService.delete(recipe: recipe)
             .receive(on: DispatchQueue.main)

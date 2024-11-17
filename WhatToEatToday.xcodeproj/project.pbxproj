@@ -8,9 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		DC2713EE2C28BC53007F54E9 /* Recipes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DC2713EC2C28BC53007F54E9 /* Recipes.xcdatamodeld */; };
-		DC2714232C28CFC3007F54E9 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC2714222C28CFC3007F54E9 /* CoreDataManager.swift */; };
 		DC2714252C2B6DB5007F54E9 /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC2714242C2B6DB5007F54E9 /* RecipeViewModel.swift */; };
-		DC58E6282C47515D00B260D3 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E6272C47515D00B260D3 /* GameViewController.swift */; };
 		DC58E6782C557AE500B260D3 /* SlotMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E6772C557AE500B260D3 /* SlotMachineViewController.swift */; };
 		DC58E67D2C56DCFC00B260D3 /* AddRecipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E67C2C56DCFC00B260D3 /* AddRecipeTableViewController.swift */; };
 		DC58E67F2C56DE0300B260D3 /* RecipeImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E67E2C56DE0300B260D3 /* RecipeImageCell.swift */; };
@@ -25,6 +23,7 @@
 		DC5AD05F2CD320C2000C785D /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD05E2CD320C2000C785D /* CoreDataService.swift */; };
 		DC5AD0612CD47329000C785D /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD0602CD47329000C785D /* CoreDataStack.swift */; };
 		DC5AD0632CD4738B000C785D /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD0622CD4738B000C785D /* DIContainer.swift */; };
+		DC5AD1022CE44DDB000C785D /* SlotMachineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD1012CE44DDB000C785D /* SlotMachineView.swift */; };
 		DCCC12B92BD702FF00BB0D0F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCCC12B82BD702FF00BB0D0F /* AppDelegate.swift */; };
 		DCCC12BB2BD702FF00BB0D0F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCCC12BA2BD702FF00BB0D0F /* SceneDelegate.swift */; };
 		DCCC12BD2BD702FF00BB0D0F /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCCC12BC2BD702FF00BB0D0F /* TabBarViewController.swift */; };
@@ -38,9 +37,7 @@
 
 /* Begin PBXFileReference section */
 		DC2713ED2C28BC53007F54E9 /* Recipe.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Recipe.xcdatamodel; sourceTree = "<group>"; };
-		DC2714222C28CFC3007F54E9 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		DC2714242C2B6DB5007F54E9 /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
-		DC58E6272C47515D00B260D3 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		DC58E6772C557AE500B260D3 /* SlotMachineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotMachineViewController.swift; sourceTree = "<group>"; };
 		DC58E67C2C56DCFC00B260D3 /* AddRecipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRecipeTableViewController.swift; sourceTree = "<group>"; };
 		DC58E67E2C56DE0300B260D3 /* RecipeImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeImageCell.swift; sourceTree = "<group>"; };
@@ -55,6 +52,7 @@
 		DC5AD05E2CD320C2000C785D /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		DC5AD0602CD47329000C785D /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		DC5AD0622CD4738B000C785D /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
+		DC5AD1012CE44DDB000C785D /* SlotMachineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotMachineView.swift; sourceTree = "<group>"; };
 		DCCC12B52BD702FF00BB0D0F /* WhatToEatToday.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatToEatToday.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCCC12B82BD702FF00BB0D0F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DCCC12BA2BD702FF00BB0D0F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -90,15 +88,11 @@
 		DC2713E12C24C80F007F54E9 /* AddRecipe */ = {
 			isa = PBXGroup;
 			children = (
-				DCCC12D62BDAF9A300BB0D0F /* IngredientCell.swift */,
-				DC58E6882C645DF900B260D3 /* IngredientCollectionViewCell.swift */,
+				DC5AD10A2CE99D26000C785D /* Recipe */,
+				DC5AD1082CE99D11000C785D /* Ingredients */,
 				DC58E67C2C56DCFC00B260D3 /* AddRecipeTableViewController.swift */,
 				DC58E68C2C65AB5300B260D3 /* TextFieldDelegate.swift */,
-				DC58E6802C56E12400B260D3 /* RecipeNameCell.swift */,
 				DC58E6862C6457FA00B260D3 /* PaddedTextField.swift */,
-				DC58E67E2C56DE0300B260D3 /* RecipeImageCell.swift */,
-				DC58E6822C56E27700B260D3 /* RecipeNotesCell.swift */,
-				DC58E6842C56E8B800B260D3 /* IngredientsHeaderView.swift */,
 			);
 			path = AddRecipe;
 			sourceTree = "<group>";
@@ -131,11 +125,69 @@
 		DC5AD05D2CD320AD000C785D /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
+				DC2713EC2C28BC53007F54E9 /* Recipes.xcdatamodeld */,
 				DC5AD05E2CD320C2000C785D /* CoreDataService.swift */,
 				DC5AD0602CD47329000C785D /* CoreDataStack.swift */,
 				DC5AD0622CD4738B000C785D /* DIContainer.swift */,
 			);
 			path = Persistence;
+			sourceTree = "<group>";
+		};
+		DC5AD1052CE99CAE000C785D /* SlotMachine */ = {
+			isa = PBXGroup;
+			children = (
+				DC58E6772C557AE500B260D3 /* SlotMachineViewController.swift */,
+				DC5AD1012CE44DDB000C785D /* SlotMachineView.swift */,
+			);
+			path = SlotMachine;
+			sourceTree = "<group>";
+		};
+		DC5AD1062CE99CE2000C785D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				DC58E68A2C645EAB00B260D3 /* UIView+Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		DC5AD1072CE99CEC000C785D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				DC2713E02C24C807007F54E9 /* MainView */,
+				DC5AD10B2CE99D47000C785D /* StateView */,
+				DC2713E42C24C82A007F54E9 /* RecipeList */,
+				DC2713E32C24C820007F54E9 /* RecipeDetail */,
+				DC2713E12C24C80F007F54E9 /* AddRecipe */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		DC5AD1082CE99D11000C785D /* Ingredients */ = {
+			isa = PBXGroup;
+			children = (
+				DCCC12D62BDAF9A300BB0D0F /* IngredientCell.swift */,
+				DC58E6882C645DF900B260D3 /* IngredientCollectionViewCell.swift */,
+				DC58E6842C56E8B800B260D3 /* IngredientsHeaderView.swift */,
+			);
+			path = Ingredients;
+			sourceTree = "<group>";
+		};
+		DC5AD10A2CE99D26000C785D /* Recipe */ = {
+			isa = PBXGroup;
+			children = (
+				DC58E6802C56E12400B260D3 /* RecipeNameCell.swift */,
+				DC58E67E2C56DE0300B260D3 /* RecipeImageCell.swift */,
+				DC58E6822C56E27700B260D3 /* RecipeNotesCell.swift */,
+			);
+			path = Recipe;
+			sourceTree = "<group>";
+		};
+		DC5AD10B2CE99D47000C785D /* StateView */ = {
+			isa = PBXGroup;
+			children = (
+				DC5AD05B2CC9E2EB000C785D /* EmptyView.swift */,
+			);
+			path = StateView;
 			sourceTree = "<group>";
 		};
 		DCCC12AC2BD702FF00BB0D0F = {
@@ -157,18 +209,11 @@
 		DCCC12B72BD702FF00BB0D0F /* WhatToEatToday */ = {
 			isa = PBXGroup;
 			children = (
-				DC58E68A2C645EAB00B260D3 /* UIView+Extension.swift */,
-				DC2714222C28CFC3007F54E9 /* CoreDataManager.swift */,
-				DC58E6272C47515D00B260D3 /* GameViewController.swift */,
-				DC58E6772C557AE500B260D3 /* SlotMachineViewController.swift */,
-				DC5AD05B2CC9E2EB000C785D /* EmptyView.swift */,
-				DC2713EC2C28BC53007F54E9 /* Recipes.xcdatamodeld */,
+				DC5AD1072CE99CEC000C785D /* Views */,
+				DC5AD1062CE99CE2000C785D /* Extensions */,
+				DC5AD1052CE99CAE000C785D /* SlotMachine */,
 				DC5AD05D2CD320AD000C785D /* Persistence */,
 				DC58E6792C558FF900B260D3 /* ViewModel */,
-				DC2713E42C24C82A007F54E9 /* RecipeList */,
-				DC2713E32C24C820007F54E9 /* RecipeDetail */,
-				DC2713E12C24C80F007F54E9 /* AddRecipe */,
-				DC2713E02C24C807007F54E9 /* MainView */,
 				DCCC12B82BD702FF00BB0D0F /* AppDelegate.swift */,
 				DCCC12BA2BD702FF00BB0D0F /* SceneDelegate.swift */,
 				DCCC12C12BD7030100BB0D0F /* Assets.xcassets */,
@@ -258,7 +303,7 @@
 				DC5AD05F2CD320C2000C785D /* CoreDataService.swift in Sources */,
 				DC58E67D2C56DCFC00B260D3 /* AddRecipeTableViewController.swift in Sources */,
 				DCCC12CD2BD705F500BB0D0F /* RecipeListViewController.swift in Sources */,
-				DC58E6282C47515D00B260D3 /* GameViewController.swift in Sources */,
+				DC5AD1022CE44DDB000C785D /* SlotMachineView.swift in Sources */,
 				DCCC12BD2BD702FF00BB0D0F /* TabBarViewController.swift in Sources */,
 				DC58E6872C6457FA00B260D3 /* PaddedTextField.swift in Sources */,
 				DCCC12B92BD702FF00BB0D0F /* AppDelegate.swift in Sources */,
@@ -272,7 +317,6 @@
 				DCCC12BB2BD702FF00BB0D0F /* SceneDelegate.swift in Sources */,
 				DC5AD0632CD4738B000C785D /* DIContainer.swift in Sources */,
 				DC58E67F2C56DE0300B260D3 /* RecipeImageCell.swift in Sources */,
-				DC2714232C28CFC3007F54E9 /* CoreDataManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
