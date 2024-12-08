@@ -23,8 +23,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
         let viewModel = RecipeViewModel(dependencyContainer.coreDataService)
         let vc = TabBarViewController(viewModel: viewModel)
-        let navVC = UINavigationController(rootViewController: vc)
-        window?.rootViewController = navVC
+//        let navVC = UINavigationController(rootViewController: vc)
+        window?.rootViewController = vc
         
     }
 

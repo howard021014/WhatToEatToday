@@ -1,7 +1,7 @@
 import UIKit
 import Combine
 
-class SlotMachineViewController: UIViewController {
+class SlotMachineViewController: BaseViewController {
     
     private var recipes = [Recipe]()
     private var currentIndex = 0
@@ -25,42 +25,32 @@ class SlotMachineViewController: UIViewController {
     }()
    
     var slotView: SlotMachineView?
-    let viewModel: RecipeViewModel
-    
-    init(viewModel: RecipeViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         
         // To prevent the large title from collapsing
-        view.addSubview(UIView())
-        setupViewModelBinding()
-        viewModel.fetchRecipes()
+//        view.addSubview(UIView())
+
         addLoadingIndicator()
         addEmptyLabel()
+        setupViewModelBinding()
+//        setupNavigationBar()
+        viewModel.fetchRecipes()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addRecipe))
-        self.tabBarController?.navigationItem.setRightBarButton(addButton, animated: true)
-    }
-    
-    @objc
-    func addRecipe() {
-        let vc = AddRecipeTableViewController(viewModel: viewModel)
-        let nav = UINavigationController(rootViewController: vc)
-        present(nav, animated: true)
-    }
+//    func setupNavigationBar() {
+//        navigationController?.navigationBar.prefersLargeTitles = true
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addRecipe))
+//    }
+//    
+//    @objc
+//    func addRecipe() {
+//        let vc = AddRecipeTableViewController(viewModel: viewModel)
+//        let nav = UINavigationController(rootViewController: vc)
+//        present(nav, animated: true)
+//    }
 
     private func setupViewModelBinding() {
         viewModel.$state

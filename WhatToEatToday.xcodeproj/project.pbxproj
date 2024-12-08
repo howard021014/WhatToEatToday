@@ -24,6 +24,7 @@
 		DC5AD0612CD47329000C785D /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD0602CD47329000C785D /* CoreDataStack.swift */; };
 		DC5AD0632CD4738B000C785D /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD0622CD4738B000C785D /* DIContainer.swift */; };
 		DC5AD1022CE44DDB000C785D /* SlotMachineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD1012CE44DDB000C785D /* SlotMachineView.swift */; };
+		DC5AD10D2D06319C000C785D /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD10C2D06319C000C785D /* BaseViewController.swift */; };
 		DCCC12B92BD702FF00BB0D0F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCCC12B82BD702FF00BB0D0F /* AppDelegate.swift */; };
 		DCCC12BB2BD702FF00BB0D0F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCCC12BA2BD702FF00BB0D0F /* SceneDelegate.swift */; };
 		DCCC12BD2BD702FF00BB0D0F /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCCC12BC2BD702FF00BB0D0F /* TabBarViewController.swift */; };
@@ -53,6 +54,7 @@
 		DC5AD0602CD47329000C785D /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		DC5AD0622CD4738B000C785D /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		DC5AD1012CE44DDB000C785D /* SlotMachineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotMachineView.swift; sourceTree = "<group>"; };
+		DC5AD10C2D06319C000C785D /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		DCCC12B52BD702FF00BB0D0F /* WhatToEatToday.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatToEatToday.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCCC12B82BD702FF00BB0D0F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DCCC12BA2BD702FF00BB0D0F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -77,14 +79,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DC2713E02C24C807007F54E9 /* MainView */ = {
-			isa = PBXGroup;
-			children = (
-				DCCC12BC2BD702FF00BB0D0F /* TabBarViewController.swift */,
-			);
-			path = MainView;
-			sourceTree = "<group>";
-		};
 		DC2713E12C24C80F007F54E9 /* AddRecipe */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,8 +147,10 @@
 		DC5AD1072CE99CEC000C785D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				DC2713E02C24C807007F54E9 /* MainView */,
+				DCCC12BC2BD702FF00BB0D0F /* TabBarViewController.swift */,
+				DC5AD10C2D06319C000C785D /* BaseViewController.swift */,
 				DC5AD10B2CE99D47000C785D /* StateView */,
+				DC5AD1052CE99CAE000C785D /* SlotMachine */,
 				DC2713E42C24C82A007F54E9 /* RecipeList */,
 				DC2713E32C24C820007F54E9 /* RecipeDetail */,
 				DC2713E12C24C80F007F54E9 /* AddRecipe */,
@@ -210,10 +206,9 @@
 			isa = PBXGroup;
 			children = (
 				DC5AD1072CE99CEC000C785D /* Views */,
-				DC5AD1062CE99CE2000C785D /* Extensions */,
-				DC5AD1052CE99CAE000C785D /* SlotMachine */,
-				DC5AD05D2CD320AD000C785D /* Persistence */,
 				DC58E6792C558FF900B260D3 /* ViewModel */,
+				DC5AD1062CE99CE2000C785D /* Extensions */,
+				DC5AD05D2CD320AD000C785D /* Persistence */,
 				DCCC12B82BD702FF00BB0D0F /* AppDelegate.swift */,
 				DCCC12BA2BD702FF00BB0D0F /* SceneDelegate.swift */,
 				DCCC12C12BD7030100BB0D0F /* Assets.xcassets */,
@@ -313,6 +308,7 @@
 				DC2714252C2B6DB5007F54E9 /* RecipeViewModel.swift in Sources */,
 				DC58E68B2C645EAB00B260D3 /* UIView+Extension.swift in Sources */,
 				DC58E6782C557AE500B260D3 /* SlotMachineViewController.swift in Sources */,
+				DC5AD10D2D06319C000C785D /* BaseViewController.swift in Sources */,
 				DC2713EE2C28BC53007F54E9 /* Recipes.xcdatamodeld in Sources */,
 				DCCC12BB2BD702FF00BB0D0F /* SceneDelegate.swift in Sources */,
 				DC5AD0632CD4738B000C785D /* DIContainer.swift in Sources */,
