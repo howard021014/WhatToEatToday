@@ -11,7 +11,7 @@ protocol IngredientDataDelegate: AnyObject {
     func saveIngredient(name: String, unit: String)
 }
 
-class IngredientCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class IngredientCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, EditableCell {
 
     static let identifier = "IngredientCell"
     var ingredientData = IngredientData()
@@ -58,8 +58,10 @@ class IngredientCell: UITableViewCell, UICollectionViewDataSource, UICollectionV
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientCollectionViewCell.identifier, for: indexPath) as? IngredientCollectionViewCell {
             if viewing {
                 if indexPath.item == 0 {
+                    cell.setEditable(!viewing)
                     cell.configure(with: ingredientData.name)
                 } else {
+                    cell.setEditable(!viewing)
                     cell.configure(with: ingredientData.unit)
                 }
             } else {
@@ -97,5 +99,9 @@ class IngredientCell: UITableViewCell, UICollectionViewDataSource, UICollectionV
     func configure(with ingredientData: IngredientData) {
         viewing = true
         self.ingredientData = ingredientData
+    }
+    
+    func setEditable(_ editable: Bool) {
+        viewing = !editable
     }
 }

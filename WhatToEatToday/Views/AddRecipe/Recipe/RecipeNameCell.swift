@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RecipeNameCell: UITableViewCell, UITextFieldDelegate {
+class RecipeNameCell: UITableViewCell, UITextFieldDelegate, EditableCell {
 
     static let identifier = "RecipeNameCell"
     
@@ -65,5 +65,10 @@ class RecipeNameCell: UITableViewCell, UITextFieldDelegate {
     
     func configure(with text: String?) {
         recipeNameTextField.text = text
+    }
+    
+    func setEditable(_ editable: Bool) {
+        recipeNameTextField.isEnabled = editable
+        contentView.backgroundColor = editable ? .systemBackground : .systemGray6
     }
 }

@@ -96,7 +96,7 @@ class RecipeListViewController: BaseViewController {
 extension RecipeListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        show(RecipeDetailViewController(recipes[indexPath.row]), sender: self)
+        show(RecipeDetailViewController(recipe: recipes[indexPath.row], viewModel: viewModel), sender: self)
     }
 }
 
@@ -115,6 +115,7 @@ extension RecipeListViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: recipeCellName, for: indexPath) as! RecipeCell
+        cell.selectionStyle = .none
         cell.recipeLabel.text = recipes[indexPath.row].name
         if let imageData = recipes[indexPath.row].image {
             let cacheKey = imageData.sha256() as NSString

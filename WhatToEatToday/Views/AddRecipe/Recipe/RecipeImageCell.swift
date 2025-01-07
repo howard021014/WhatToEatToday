@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RecipeImageCell: UITableViewCell {
+class RecipeImageCell: UITableViewCell, EditableCell {
     
     static let identifier = "RecipeImageCell"
     var onUploadButtonTapped: (() -> Void)?
@@ -62,8 +62,7 @@ class RecipeImageCell: UITableViewCell {
     private func uploadButtonTapped() {
         onUploadButtonTapped?()
     }
-    
-    
+
     func configure(with image: UIImage?) {
         if let image {
             recipeImageView.image = image
@@ -73,5 +72,9 @@ class RecipeImageCell: UITableViewCell {
             uploadButton.isHidden = false
             recipeImageView.isHidden = true
         }
+    }
+    
+    func setEditable(_ editable: Bool) {
+        recipeImageView.isUserInteractionEnabled = editable
     }
 }

@@ -17,7 +17,6 @@ enum State {
 
 class RecipeViewModel {
     @Published private(set) var state: State = .idle
-    @Published private(set) var shouldShowAddButton = false
     
     private var cancellables = Set<AnyCancellable>()
     let coreDatatService: CoreDataService

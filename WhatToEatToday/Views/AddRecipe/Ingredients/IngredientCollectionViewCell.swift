@@ -7,7 +7,7 @@
 
 import UIKit
 
-class IngredientCollectionViewCell: UICollectionViewCell, UITextFieldDelegate {
+class IngredientCollectionViewCell: UICollectionViewCell, UITextFieldDelegate, EditableCell {
     
     static let identifier = "IngredientCollectionViewCell"
     
@@ -60,5 +60,10 @@ class IngredientCollectionViewCell: UICollectionViewCell, UITextFieldDelegate {
     
     func configure(with text: String) {
         textField.text = text
+    }
+    
+    func setEditable(_ editable: Bool) {
+        textField.isEnabled = editable
+        contentView.backgroundColor = editable ? .systemBackground : .systemGray6
     }
 }

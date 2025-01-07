@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RecipeNotesCell: UITableViewCell, UITextViewDelegate {
+class RecipeNotesCell: UITableViewCell, UITextViewDelegate, EditableCell {
     
     static let identifier = "RecipeNotesCell"
     
@@ -85,5 +85,10 @@ class RecipeNotesCell: UITableViewCell, UITextViewDelegate {
     
     func configure(with text: String?) {
         notesView.text = text
+    }
+    
+    func setEditable(_ editable: Bool) {
+        notesView.isEditable = editable
+        notesView.backgroundColor = editable ? .systemBackground : .systemGray6
     }
 }
