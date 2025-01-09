@@ -68,12 +68,13 @@ class RecipeDetailViewController: RecipeBaseTableViewController {
                 target: self,
                 action: #selector(saveRecipe)
             )
-//            navigationItem.leftBarButtonItem = UIBarButtonItem(
-//                title: "Cancel",
-//                style: .plain,
-//                target: self,
-//                action: #selector(cancelEdit)
-//            )
+            navigationItem.leftBarButtonItem = UIBarButtonItem(
+                title: "Cancel",
+                style: .plain,
+                target: self,
+                action: #selector(cancelEdit)
+            )
+
         } else {
             // In view mode: Show Edit button
             navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -87,6 +88,11 @@ class RecipeDetailViewController: RecipeBaseTableViewController {
         
         // Update all visible cells
         updateCellsEditingState(editing)
+    }
+    
+    @objc
+    private func cancelEdit() {
+        setEditing(false)
     }
     
     private func updateCellsEditingState(_ editing: Bool) {
