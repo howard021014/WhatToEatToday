@@ -64,4 +64,17 @@ class RecipeViewModel {
             }
             .store(in: &cancellables)
     }
+    
+    func updateRecipe(_ recipe: Recipe, name: String, ingredients: [IngredientData], image: UIImage?, notes: String?) {
+        coreDatatService.update(recipe: recipe, name: name, ingredients: ingredients, image: image?.pngData(), notes: notes)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] result in
+                if case .failure(let error) = result {
+                    self?.state = .failure(error)
+                }
+            } receiveValue: { [weak self] _ in
+                self?.fetchRecipes()
+            }
+            .store(in: &cancellables)
+    }
 }

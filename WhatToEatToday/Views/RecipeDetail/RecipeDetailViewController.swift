@@ -15,15 +15,7 @@ class RecipeDetailViewController: RecipeBaseTableViewController {
     init(recipe: Recipe, viewModel: RecipeViewModel) {
         self.recipe = recipe
         super.init(viewModel: viewModel, editable: false)
-        
-        self.recipeName = recipe.name
-        self.recipeImage = UIImage(data: recipe.image ?? Data())
-        self.recipeNotes = recipe.notes
-        if let ingredients = recipe.ingredients?.array as? [Ingredient] {
-            for ingredient in ingredients {
-                ingredientData.append(IngredientData(name: ingredient.name ?? "", unit: ingredient.unit ?? ""))
-            }
-        }
+        setOriginalValues()
     }
 
     required init?(coder: NSCoder) {
@@ -47,8 +39,9 @@ class RecipeDetailViewController: RecipeBaseTableViewController {
     }
         
     // TODO: - This should be an update
-    @objc private func saveRecipe() {
-        viewModel.addRecipe(
+    @objc private func updateRecipe() {
+        viewModel.updateRecipe(
+            recipe,
             name: recipeName ?? "",
             ingredients: ingredientData,
             image: recipeImage,
@@ -66,7 +59,7 @@ class RecipeDetailViewController: RecipeBaseTableViewController {
                 title: "Save",
                 style: .done,
                 target: self,
-                action: #selector(saveRecipe)
+                action: #selector(updateRecipe)
             )
             navigationItem.leftBarButtonItem = UIBarButtonItem(
                 title: "Cancel",
@@ -92,7 +85,21 @@ class RecipeDetailViewController: RecipeBaseTableViewController {
     
     @objc
     private func cancelEdit() {
+        ingredientData.removeAll()
+        setOriginalValues()
+        tableView.reloadData()
         setEditing(false)
+    }
+    
+    private func setOriginalValues() {
+        self.recipeName = recipe.name
+        self.recipeImage = UIImage(data: recipe.image ?? Data())
+        self.recipeNotes = recipe.notes
+        if let ingredients = recipe.ingredients?.array as? [Ingredient] {
+            for ingredient in ingredients {
+                ingredientData.append(IngredientData(name: ingredient.name ?? "", unit: ingredient.unit ?? ""))
+            }
+        }
     }
     
     private func updateCellsEditingState(_ editing: Bool) {
