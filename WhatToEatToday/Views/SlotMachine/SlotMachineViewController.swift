@@ -29,28 +29,12 @@ class SlotMachineViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
-        // To prevent the large title from collapsing
-//        view.addSubview(UIView())
 
         addLoadingIndicator()
         addEmptyLabel()
         setupViewModelBinding()
-//        setupNavigationBar()
         viewModel.fetchRecipes()
     }
-    
-//    func setupNavigationBar() {
-//        navigationController?.navigationBar.prefersLargeTitles = true
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addRecipe))
-//    }
-//    
-//    @objc
-//    func addRecipe() {
-//        let vc = AddRecipeTableViewController(viewModel: viewModel)
-//        let nav = UINavigationController(rootViewController: vc)
-//        present(nav, animated: true)
-//    }
 
     private func setupViewModelBinding() {
         viewModel.$state
@@ -111,6 +95,7 @@ class SlotMachineViewController: BaseViewController {
         
         slotView = SlotMachineView(recipes: recipes)
         slotView?.translatesAutoresizingMaskIntoConstraints = false
+        slotView?.delegate = self
         
         view.addSubview(slotView!)
         NSLayoutConstraint.activate([
@@ -127,8 +112,12 @@ class SlotMachineViewController: BaseViewController {
     }
 }
 
-
-
+extension SlotMachineViewController: SlotMachineViewDelegate {
+    func showResult(_ name: String) {
+        let resultVC = ResultViewController(selectedItem: name)
+        present(resultVC, animated: true, completion: nil)
+    }
+}
 
 class ResultViewController: UIViewController {
     

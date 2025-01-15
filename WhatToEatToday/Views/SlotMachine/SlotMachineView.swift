@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol SlotMachineViewDelegate {
+    func showResult(_ name: String)
+}
+
 class SlotMachineView: UIView {
     
     private lazy var containerView: UIView = {
@@ -64,6 +68,7 @@ class SlotMachineView: UIView {
     private var currentIndex = 0
 
     let recipes: [Recipe]
+    var delegate: SlotMachineViewDelegate?
     
     init(recipes: [Recipe]) {
         self.recipes = recipes
@@ -116,7 +121,6 @@ class SlotMachineView: UIView {
 
     private func setupSlotItems() {
         let extendedItems = Array(repeating: recipes, count: 100).flatMap { $0 }
-        print("HT ----- extend items count: \(extendedItems.count)")
         var previousLabel: UILabel?
         for (_, item) in extendedItems.enumerated() {
             let label = UILabel()
@@ -138,8 +142,7 @@ class SlotMachineView: UIView {
         if let lastLabel = previousLabel {
             lastLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         }
-        
-        print("HT ----- slotView content size: \(scrollView.contentSize)")
+
         // Set initial position to the middle set of items
         scrollView.contentOffset.y = CGFloat(recipes.count) * itemHeight
     }
@@ -199,6 +202,6 @@ class SlotMachineView: UIView {
     }
     
     private func showResult() {
-        print("You have selected: \(recipes[currentIndex].name ?? "")")
+        delegate?.showResult(recipes[currentIndex].name ?? "")
     }
 }

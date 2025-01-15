@@ -23,6 +23,10 @@ class RecipeBaseTableViewController: UITableViewController {
     var recipeNotes: String?
     var recipeImage: UIImage?
     
+    enum TableSection: Int {
+        case image, name, ingredients, notes
+    }
+    
     init(viewModel: RecipeViewModel, editable: Bool = true) {
         self.viewModel = viewModel
         self.editable = editable
@@ -69,10 +73,10 @@ class RecipeBaseTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0, 1, 3:
+        switch TableSection(rawValue: section) {
+        case .image, .name, .notes:
             return 1
-        case 2:
+        case .ingredients:
             return ingredientData.count
         default:
             return 0
@@ -80,15 +84,14 @@ class RecipeBaseTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("HT ----- Table view populating the cell in \(#function)")
-        switch indexPath.section {
-        case 0:
+        switch TableSection(rawValue: indexPath.section) {
+        case .image:
             return configureImageCell(tableView, at: indexPath)
-        case 1:
+        case .name:
             return configureNameCell(tableView, at: indexPath)
-        case 2:
+        case .ingredients:
             return configureIngredientCell(tableView, at: indexPath)
-        case 3:
+        case .notes:
             return configureNotesCell(tableView, at: indexPath)
         default:
             return UITableViewCell()
@@ -148,12 +151,12 @@ class RecipeBaseTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 1:
+        switch TableSection(rawValue: section) {
+        case .name:
             return "Recipe Name"
-        case 2:
+        case .ingredients:
             return "Ingredients"
-        case 3:
+        case .notes:
             return "Extra Notes"
         default:
             return nil
@@ -161,7 +164,7 @@ class RecipeBaseTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
+        if case .image = TableSection(rawValue: section) {
             return 0
         }
         
@@ -169,12 +172,12 @@ class RecipeBaseTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0:
+        switch TableSection(rawValue: indexPath.section) {
+        case .image:
             return 300
-        case 2:
+        case .ingredients:
             return 44
-        case 3:
+        case .notes:
             return 300
         default:
             return tableView.rowHeight
@@ -182,7 +185,7 @@ class RecipeBaseTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 2 {
+        if case .ingredients = TableSection(rawValue: section) {
             // Get the default header view
             let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") ?? UITableViewHeaderFooterView(reuseIdentifier: "header")
 
@@ -207,6 +210,17 @@ class RecipeBaseTableViewController: UITableViewController {
             return headerView
         }
         return nil
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        TableSection(rawValue: indexPath.section) == .ingredients
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            ingredientData.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
     }
     
     @objc
