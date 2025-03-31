@@ -5,17 +5,19 @@
 //  Created by Howard tsai on 2024-07-28.
 //
 
+import Combine
 import UIKit
-import PhotosUI
 
 class RecipeDetailViewController: RecipeBaseTableViewController {
     
     private var recipe: Recipe
+    private var cancellables = Set<AnyCancellable>()
     
     init(recipe: Recipe, viewModel: RecipeViewModel) {
         self.recipe = recipe
-        super.init(viewModel: viewModel, editable: false)
+        super.init(viewModel: viewModel, isEditable: false)
         setOriginalValues()
+        setupBindings()
     }
 
     required init?(coder: NSCoder) {
@@ -34,11 +36,20 @@ class RecipeDetailViewController: RecipeBaseTableViewController {
         )
     }
     
-    @objc private func toggleEdit() {
-        setEditing(!isEditing)
+    private func setupBindings() {
+        $isEditable
+            .receive(on: RunLoop.main)
+            .sink { [weak self] editable in
+                self?.updateUIForEditingState(editable)
+                self?.updateAddIngredientButtonVisibility(editable)
+            }
+            .store(in: &cancellables)
     }
-        
-    // TODO: - This should be an update
+    
+    @objc private func toggleEdit() {
+        isEditable = !isEditing
+    }
+
     @objc private func updateRecipe() {
         viewModel.updateRecipe(
             recipe,
@@ -48,10 +59,10 @@ class RecipeDetailViewController: RecipeBaseTableViewController {
             notes: recipeNotes
         )
         
-        setEditing(false)
+        isEditable = false
     }
     
-    func setEditing(_ editing: Bool) {
+    private func updateUIForEditingState(_ editing: Bool) {
         // Update navigation bar buttons
         if editing {
             // In edit mode: Show Save and Cancel buttons
@@ -78,17 +89,14 @@ class RecipeDetailViewController: RecipeBaseTableViewController {
             )
             navigationItem.leftBarButtonItem = nil
         }
-        
-        // Update all visible cells
-        updateCellsEditingState(editing)
     }
     
     @objc
     private func cancelEdit() {
         ingredientData.removeAll()
         setOriginalValues()
+        isEditable = false
         tableView.reloadData()
-        setEditing(false)
     }
     
     private func setOriginalValues() {
@@ -98,18 +106,6 @@ class RecipeDetailViewController: RecipeBaseTableViewController {
         if let ingredients = recipe.ingredients?.array as? [Ingredient] {
             for ingredient in ingredients {
                 ingredientData.append(IngredientData(name: ingredient.name ?? "", unit: ingredient.unit ?? ""))
-            }
-        }
-    }
-    
-    private func updateCellsEditingState(_ editing: Bool) {
-        // Go through all visible cells and update their editing state
-        for section in 0..<tableView.numberOfSections {
-            for row in 0..<tableView.numberOfRows(inSection: section) {
-                let indexPath = IndexPath(row: row, section: section)
-                if let cell = tableView.cellForRow(at: indexPath) as? EditableCell {
-                    cell.setEditable(editing)
-                }
             }
         }
     }

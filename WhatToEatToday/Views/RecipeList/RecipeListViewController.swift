@@ -9,7 +9,6 @@ import UIKit
 import CryptoKit
 import Combine
 
-// TODO: Update detail view
 class RecipeListViewController: BaseViewController {
     
     let imageCache = NSCache<NSString, UIImage>()

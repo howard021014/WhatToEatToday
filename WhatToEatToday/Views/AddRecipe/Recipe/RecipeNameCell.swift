@@ -69,6 +69,6 @@ class RecipeNameCell: UITableViewCell, UITextFieldDelegate, EditableCell {
     
     func setEditable(_ editable: Bool) {
         recipeNameTextField.isEnabled = editable
-        contentView.backgroundColor = editable ? .systemBackground : .systemGray6
+        recipeNameTextField.backgroundColor = editable ? .systemBackground : .systemGray6
     }
 }

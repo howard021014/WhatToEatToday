@@ -7,6 +7,7 @@
 
 import UIKit
 import PhotosUI
+import Combine
 
 struct IngredientData {
     var name = ""
@@ -16,20 +17,25 @@ struct IngredientData {
 class RecipeBaseTableViewController: UITableViewController {
 
     let viewModel: RecipeViewModel
-    let editable: Bool
+    
+    @Published var isEditable: Bool
     
     var ingredientData = [IngredientData]()
     var recipeName: String?
     var recipeNotes: String?
     var recipeImage: UIImage?
     
+    private var cancellables = Set<AnyCancellable>()
+    private weak var headerView: UITableViewHeaderFooterView?
+    private weak var addIngredientButton: UIButton?
+    
     enum TableSection: Int {
         case image, name, ingredients, notes
     }
     
-    init(viewModel: RecipeViewModel, editable: Bool = true) {
+    init(viewModel: RecipeViewModel, isEditable: Bool = true) {
         self.viewModel = viewModel
-        self.editable = editable
+        self.isEditable = isEditable
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -104,7 +110,17 @@ class RecipeBaseTableViewController: UITableViewController {
         }
         
         cell.configure(with: recipeImage)
-        cell.setEditable(editable)
+        
+        $isEditable
+            .receive(on: RunLoop.main)
+            .sink { [weak cell] editable in
+                cell?.setEditable(editable)
+            }
+            .store(in: &cancellables)
+        
+        // Initial state
+        cell.setEditable(isEditable)
+        
         cell.onUploadButtonTapped = { [weak self] in
             self?.showImagePicker()
         }
@@ -117,7 +133,17 @@ class RecipeBaseTableViewController: UITableViewController {
         }
         
         cell.configure(with: recipeName)
-        cell.setEditable(editable)
+
+        $isEditable
+            .receive(on: RunLoop.main)
+            .sink { [weak cell] editable in
+                cell?.setEditable(editable)
+            }
+            .store(in: &cancellables)
+        
+        // Initial state
+        cell.setEditable(isEditable)
+        
         cell.delegate = self
         return cell
     }
@@ -128,7 +154,18 @@ class RecipeBaseTableViewController: UITableViewController {
         }
 
         cell.configure(with: ingredientData[indexPath.row])
-        cell.setEditable(editable)
+
+        $isEditable
+            .receive(on: RunLoop.main)
+            .sink { [weak cell] editable in
+                cell?.setEditable(editable)
+            }
+            .store(in: &cancellables)
+        
+        // Initial state
+        cell.setEditable(isEditable)
+        
+        
         cell.onIngredientDataUpdate = { [weak self] updatedData in
             self?.ingredientData[indexPath.row] = updatedData
         }
@@ -141,7 +178,17 @@ class RecipeBaseTableViewController: UITableViewController {
         }
         
         cell.configure(with: recipeNotes)
-        cell.setEditable(editable)
+
+        $isEditable
+            .receive(on: RunLoop.main)
+            .sink { [weak cell] editable in
+                cell?.setEditable(editable)
+            }
+            .store(in: &cancellables)
+        
+        // Initial state
+        cell.setEditable(isEditable)
+
         cell.delegate = self
         return cell
     }
@@ -189,23 +236,25 @@ class RecipeBaseTableViewController: UITableViewController {
             // Get the default header view
             let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") ?? UITableViewHeaderFooterView(reuseIdentifier: "header")
 
+            self.headerView = headerView
+            
             // Add a button to the header view
-            if editable {
-                let addButton = UIButton(type: .system)
-                addButton.translatesAutoresizingMaskIntoConstraints = false
-                addButton.setImage(UIImage(systemName: "plus")!, for: .normal)
-                addButton.tag = section
-                addButton.addTarget(self, action: #selector(addNewIngredientRow(_:)), for: .touchUpInside)
+            let addButton = UIButton(type: .system)
+            addButton.translatesAutoresizingMaskIntoConstraints = false
+            addButton.setImage(UIImage(systemName: "plus")!, for: .normal)
+            addButton.tag = section
+            addButton.addTarget(self, action: #selector(addNewIngredientRow(_:)), for: .touchUpInside)
+            
+            addButton.isHidden = !isEditable
+            self.addIngredientButton = addButton
 
-                // Add the button to the header view
-                headerView.contentView.addSubview(addButton)
-                NSLayoutConstraint.activate([
-                    addButton.trailingAnchor.constraint(equalTo: headerView.contentView.trailingAnchor, constant: -10),
-                    addButton.centerYAnchor.constraint(equalTo: headerView.contentView.centerYAnchor),
-                    addButton.heightAnchor.constraint(equalToConstant: 18.0),
-                    addButton.widthAnchor.constraint(equalToConstant: 18.0)
-                ])
-            }
+            headerView.contentView.addSubview(addButton)
+            NSLayoutConstraint.activate([
+                addButton.trailingAnchor.constraint(equalTo: headerView.contentView.trailingAnchor, constant: -10),
+                addButton.centerYAnchor.constraint(equalTo: headerView.contentView.centerYAnchor),
+                addButton.heightAnchor.constraint(equalToConstant: 18.0),
+                addButton.widthAnchor.constraint(equalToConstant: 18.0)
+            ])
 
             return headerView
         }
@@ -228,6 +277,10 @@ class RecipeBaseTableViewController: UITableViewController {
         let section = sender.tag
         ingredientData.append(IngredientData())
         tableView.insertRows(at: [IndexPath(row: ingredientData.count - 1, section: section)], with: .automatic)
+    }
+
+    func updateAddIngredientButtonVisibility(_ isEditable: Bool) {
+        addIngredientButton?.isHidden = !isEditable
     }
 }
 

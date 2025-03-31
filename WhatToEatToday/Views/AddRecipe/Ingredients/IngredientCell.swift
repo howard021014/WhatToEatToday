@@ -56,20 +56,22 @@ class IngredientCell: UITableViewCell, UICollectionViewDataSource, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientCollectionViewCell.identifier, for: indexPath) as? IngredientCollectionViewCell {
-            if viewing {
-                if indexPath.item == 0 {
-                    cell.setEditable(!viewing)
-                    cell.configure(with: ingredientData.name)
-                } else {
-                    cell.setEditable(!viewing)
-                    cell.configure(with: ingredientData.unit)
+            
+            cell.setEditable(!viewing)
+            
+            if indexPath.item == 0 {
+                cell.configure(with: ingredientData.name)
+                if !viewing {
+                    cell.textField.placeholder = "Item Name"
                 }
             } else {
-                if indexPath.item == 0 {
-                    cell.textField.placeholder = "Item Name"
-                } else {
+                cell.configure(with: ingredientData.unit)
+                if !viewing {
                     cell.textField.placeholder = "Unit"
                 }
+            }
+            
+            if !viewing {
                 cell.onTextChange = { [weak self] text in
                     print("HT ---- Text changed: \(text) at \(indexPath.item) at row: \(indexPath.row)")
                     if indexPath.item == 0 {
@@ -80,7 +82,7 @@ class IngredientCell: UITableViewCell, UICollectionViewDataSource, UICollectionV
                     self?.onIngredientDataUpdate?(self?.ingredientData ?? IngredientData())
                 }
             }
-            
+
             return cell
         }
         
@@ -99,9 +101,11 @@ class IngredientCell: UITableViewCell, UICollectionViewDataSource, UICollectionV
     func configure(with ingredientData: IngredientData) {
         viewing = true
         self.ingredientData = ingredientData
+        collectionView.reloadData()
     }
     
     func setEditable(_ editable: Bool) {
         viewing = !editable
+        collectionView.reloadData()
     }
 }
