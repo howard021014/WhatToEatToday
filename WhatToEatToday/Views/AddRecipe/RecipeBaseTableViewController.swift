@@ -47,12 +47,19 @@ class RecipeBaseTableViewController: UITableViewController {
         super.viewDidLoad()
         setupTableView()
         registerCells()
+        setupFinishEditing()
     }
     
     private func setupTableView() {
         tableView.separatorStyle = .none
         tableView.keyboardDismissMode = .onDrag
         tableView.allowsSelection = false
+    }
+    
+    private func setupFinishEditing() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(finishEditing))
+        tap.cancelsTouchesInView = false
+        tableView.addGestureRecognizer(tap)
     }
     
     private func registerCells() {
@@ -73,6 +80,11 @@ class RecipeBaseTableViewController: UITableViewController {
         present(picker, animated: true)
     }
     
+    @objc
+    private func finishEditing() {
+        view.endEditing(true)
+    }
+
     // MARK: - UITableViewDataSource
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 4
@@ -267,16 +279,20 @@ class RecipeBaseTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            ingredientData.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.performBatchUpdates {
+                ingredientData.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+            }
         }
     }
     
     @objc
     private func addNewIngredientRow(_ sender: UIButton) {
         let section = sender.tag
-        ingredientData.append(IngredientData())
-        tableView.insertRows(at: [IndexPath(row: ingredientData.count - 1, section: section)], with: .automatic)
+        tableView.performBatchUpdates {
+            ingredientData.append(IngredientData())
+            tableView.insertRows(at: [IndexPath(row: ingredientData.count - 1, section: section)], with: .automatic)
+        }
     }
 
     func updateAddIngredientButtonVisibility(_ isEditable: Bool) {

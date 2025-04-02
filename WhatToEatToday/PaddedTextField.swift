@@ -10,13 +10,7 @@ import UIKit
 class PaddedTextField: UITextField {
 
     var padding: UIEdgeInsets
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
+
     init(padding: UIEdgeInsets) {
         self.padding = padding
         super.init(frame: .zero)

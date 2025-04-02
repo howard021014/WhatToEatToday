@@ -120,13 +120,13 @@ class SlotMachineView: UIView {
     }
 
     private func setupSlotItems() {
-        let extendedItems = Array(repeating: recipes, count: 100).flatMap { $0 }
+        let extendedItems = Array(repeating: recipes, count: 50).flatMap { $0 }
         var previousLabel: UILabel?
         for (_, item) in extendedItems.enumerated() {
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
             label.text = item.name
-            label.font = .systemFont(ofSize: 60)
+            label.font = .systemFont(ofSize: 40)
             label.textAlignment = .center
             contentView.addSubview(label)
             NSLayoutConstraint.activate([
@@ -162,7 +162,7 @@ class SlotMachineView: UIView {
         let finalAdjustmentDuration: TimeInterval = 0.5
         
 //        let spinRotations = 3
-        let spinDistance = CGFloat(recipes.count * 20) * itemHeight // Spin through 20 sets of items
+        let spinDistance = CGFloat(recipes.count * 10) * itemHeight // Spin through 20 sets of items
         let slowDownDistance = CGFloat(recipes.count * 5) * itemHeight
         
         UIView.animateKeyframes(withDuration: totalDuration, delay: 0, options: [.calculationModeCubic], animations: {

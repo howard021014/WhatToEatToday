@@ -35,6 +35,7 @@ class RecipeNotesCell: UITableViewCell, UITextViewDelegate, EditableCell {
     
     private func setupUI() {
         setupBorder()
+        addDoneButtonKeyboard(for: notesView)
         contentView.addSubview(notesView)
         
         notesView.delegate = self
@@ -57,12 +58,10 @@ class RecipeNotesCell: UITableViewCell, UITextViewDelegate, EditableCell {
         if textView.text == placeHolderText {
             textView.text = nil
         }
-        addDoneButtonKeyboard(for: textView)
     }
     
     func addDoneButtonKeyboard(for textView: UITextView) {
-        let toolbar = UIToolbar()
-        toolbar.sizeToFit()
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 50, height: 44))
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(dismissKeyboard))
         toolbar.setItems([flexSpace, doneButton], animated: false)
