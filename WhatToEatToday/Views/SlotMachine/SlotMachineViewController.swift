@@ -114,63 +114,9 @@ class SlotMachineViewController: BaseViewController {
 
 extension SlotMachineViewController: SlotMachineViewDelegate {
     func showResult(_ name: String) {
-        let resultVC = ResultViewController(selectedItem: name)
-        present(resultVC, animated: true, completion: nil)
-    }
-}
-
-class ResultViewController: UIViewController {
-    
-    private let selectedItem: String
-    
-    private lazy var resultLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 100)
-        label.textAlignment = .center
-        return label
-    }()
-    
-    private lazy var dismissButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("OK", for: .normal)
-        button.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
-        return button
-    }()
-    
-    init(selectedItem: String) {
-        self.selectedItem = selectedItem
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupUI()
-    }
-    
-    private func setupUI() {
-        view.backgroundColor = .white
-        
-        view.addSubview(resultLabel)
-        view.addSubview(dismissButton)
-        
-        NSLayoutConstraint.activate([
-            resultLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            resultLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            
-            dismissButton.topAnchor.constraint(equalTo: resultLabel.bottomAnchor, constant: 20),
-            dismissButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
-        
-        resultLabel.text = selectedItem
-    }
-    
-    @objc private func dismissButtonTapped() {
-        dismiss(animated: true, completion: nil)
+        let alert = UIAlertController(title: nil, message: "\(name) is your meal today!!", preferredStyle: .alert)
+        let confirmAction = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(confirmAction)
+        present(alert, animated: true, completion: nil)
     }
 }

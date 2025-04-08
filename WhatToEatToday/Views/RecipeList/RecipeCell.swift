@@ -13,8 +13,7 @@ class RecipeCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 1
-        label.text = "This is a placeholder text"
-        label.textColor = .cyan
+        label.font = .systemFont(ofSize: 14.0, weight: .bold)
         return label
     }()
     
@@ -23,7 +22,6 @@ class RecipeCell: UITableViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
-//        imageView.image = UIImage(named: "placeholder")
         return imageView
     }()
     
@@ -60,11 +58,4 @@ class RecipeCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
 }
