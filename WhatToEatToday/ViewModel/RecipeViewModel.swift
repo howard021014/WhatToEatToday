@@ -19,15 +19,15 @@ class RecipeViewModel {
     @Published private(set) var state: State = .idle
     
     private var cancellables = Set<AnyCancellable>()
-    let coreDatatService: CoreDataService
+    let service: CoreDataService
     
-    init(_ coreDataService: CoreDataService) {
-        self.coreDatatService = coreDataService
+    init(service: CoreDataService) {
+        self.service = service
     }
     
     func fetchRecipes() {
         state = .loading
-        coreDatatService.fetchRecipes()
+        service.fetchRecipes()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
                 if case .failure(let error) = result {
@@ -40,7 +40,7 @@ class RecipeViewModel {
     }
     
     func addRecipe(name: String, ingredients: [IngredientData], image: UIImage?, notes: String?) {
-        coreDatatService.addRecipe(name: name, ingredients: ingredients, image: image?.pngData(), notes: notes)
+        service.addRecipe(name: name, ingredients: ingredients, image: image?.pngData(), notes: notes)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
                 if case .failure(let error) = result {
@@ -53,7 +53,7 @@ class RecipeViewModel {
     }
     
     func deleteRecipe(_ recipe: Recipe) {
-        coreDatatService.delete(recipe: recipe)
+        service.delete(recipe: recipe)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
                 if case .failure(let error) = result {
@@ -66,7 +66,7 @@ class RecipeViewModel {
     }
     
     func updateRecipe(_ recipe: Recipe, name: String, ingredients: [IngredientData], image: UIImage?, notes: String?) {
-        coreDatatService.update(recipe: recipe, name: name, ingredients: ingredients, image: image?.pngData(), notes: notes)
+        service.update(recipe: recipe, name: name, ingredients: ingredients, image: image?.pngData(), notes: notes)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
                 if case .failure(let error) = result {
