@@ -59,7 +59,7 @@ class SlotMachineViewController: BaseViewController {
             self.recipes = recipes
             if recipes.isEmpty {
                 emptyView.isHidden = false
-                slotView?.isHidden = true
+                removeSlotMachineView()
             } else {
                 emptyView.isHidden = true
                 slotView?.isHidden = false
