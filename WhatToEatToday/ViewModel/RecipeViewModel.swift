@@ -15,66 +15,84 @@ enum State {
     case failure(Error)
 }
 
-class RecipeViewModel {
+@MainActor
+class RecipeViewModel: ObservableObject {
     @Published private(set) var state: State = .idle
-    
-    private var cancellables = Set<AnyCancellable>()
+
     let service: CoreDataService
-    
     init(service: CoreDataService) {
         self.service = service
     }
     
     func fetchRecipes() {
         state = .loading
-        service.fetchRecipes()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] result in
-                if case .failure(let error) = result {
-                    self?.state = .failure(error)
-                }
-            } receiveValue: { [weak self] recipes in
-                self?.state = .success(recipes)
+        Task {
+            do {
+                let recipes = try await service.fetchRecipes()
+                state = .success(recipes)
+            } catch {
+                state = .failure(error)
             }
-            .store(in: &cancellables)
+        }
     }
     
-    func addRecipe(name: String, ingredients: [IngredientData], image: UIImage?, notes: String?) {
-        service.addRecipe(name: name, ingredients: ingredients, image: image?.pngData(), notes: notes)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] result in
-                if case .failure(let error) = result {
-                    self?.state = .failure(error)
-                }
-            } receiveValue: { [weak self] _ in
-                self?.fetchRecipes()
+    func addRecipe(
+        name: String,
+        ingredients: [IngredientData],
+        image: UIImage?,
+        notes: String?
+    ) {
+        Task {
+            do {
+                try await service.addRecipe(
+                    name: name,
+                    ingredients: ingredients,
+                    image: image?.pngData(), 
+                    notes: notes
+                )
+                
+                let updated = try await service.fetchRecipes()
+                state = .success(updated)
+            } catch {
+                state = .failure(error)
             }
-            .store(in: &cancellables)
+        }
     }
     
     func deleteRecipe(_ recipe: Recipe) {
-        service.delete(recipe: recipe)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] result in
-                if case .failure(let error) = result {
-                    self?.state = .failure(error)
-                }
-            } receiveValue: { [weak self] _ in
-                self?.fetchRecipes()
+        Task {
+            do {
+                try await service.delete(recipe: recipe)
+                let updated = try await service.fetchRecipes()
+                state = .success(updated)
+            } catch {
+                state = .failure(error)
             }
-            .store(in: &cancellables)
+        }
     }
     
-    func updateRecipe(_ recipe: Recipe, name: String, ingredients: [IngredientData], image: UIImage?, notes: String?) {
-        service.update(recipe: recipe, name: name, ingredients: ingredients, image: image?.pngData(), notes: notes)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] result in
-                if case .failure(let error) = result {
-                    self?.state = .failure(error)
-                }
-            } receiveValue: { [weak self] _ in
-                self?.fetchRecipes()
+    func updateRecipe(
+        _ recipe: Recipe,
+        name: String,
+        ingredients: [IngredientData],
+        image: UIImage?,
+        notes: String?
+    ) {
+        Task {
+            do {
+                try await service.update(
+                    recipe: recipe,
+                    name: name,
+                    ingredients: ingredients,
+                    image: image?.pngData(),
+                    notes: notes
+                )
+                
+                let updated = try await service.fetchRecipes()
+                state = .success(updated)
+            } catch {
+                state = .failure(error)
             }
-            .store(in: &cancellables)
+        }
     }
 }

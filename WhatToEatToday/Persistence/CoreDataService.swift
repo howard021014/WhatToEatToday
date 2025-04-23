@@ -10,130 +10,126 @@ import Foundation
 import CoreData
 
 protocol CoreDataService {
-    func fetchRecipes() -> Future<[Recipe], Error>
-    func addRecipe(name: String, ingredients: [IngredientData], image: Data?, notes: String?) -> Future<Void, Error>
-    func delete(recipe: Recipe) -> Future<Void, Error>
-    func update(recipe: Recipe, name: String, ingredients: [IngredientData], image: Data?, notes: String?) -> Future<Void, Error>
+    func fetchRecipes() async throws -> [Recipe]
+    func addRecipe(
+        name: String,
+        ingredients: [IngredientData],
+        image: Data?,
+        notes: String?
+    ) async throws
+    func delete(recipe: Recipe) async throws
+    func update(
+        recipe: Recipe,
+        name: String,
+        ingredients: [IngredientData],
+        image: Data?,
+        notes: String?) async throws
 }
 
 
 class CoreDataServiceImpl: CoreDataService {
-    private let context: NSManagedObjectContext
+    private let container: NSPersistentContainer
     
-    init(context: NSManagedObjectContext) {
-        self.context = context
+    init(container: NSPersistentContainer) {
+        self.container = container
     }
     
-    func fetchRecipes() -> Future<[Recipe], Error> {
-        Future { [weak self] promise in
-            guard let self = self else { return }
-            
-            let fetchRequest = NSFetchRequest<Recipe>(entityName: "Recipe")
-
-            let asyncFetchResult = NSAsynchronousFetchRequest(fetchRequest: fetchRequest) { fetchResult in
-                guard let result = fetchResult.finalResult else {
-                    promise(.failure(
-                        NSError(
-                            domain: "CoreDataService",
-                            code: 0,
-                            userInfo: [NSLocalizedDescriptionKey: "No recipes found"])
-                        )
-                    )
-                    return
+    func fetchRecipes() async throws -> [Recipe] {
+        try await withCheckedThrowingContinuation { continuation in
+            let request: NSFetchRequest<Recipe> = Recipe.fetchRequest()
+            let asyncFetchResult = NSAsynchronousFetchRequest(fetchRequest: request) { fetchResult in
+                if let recipes = fetchResult.finalResult {
+                    continuation.resume(returning: recipes)
+                } else if let error = fetchResult.operationError {
+                    continuation.resume(throwing: error)
                 }
-                
-                promise(.success(result))
             }
             
             do {
-                try context.execute(asyncFetchResult)
-            } catch let error {
-                promise(.failure(error))
+                try container.viewContext.execute(asyncFetchResult)
+            } catch {
+                continuation.resume(throwing: error)
+            }
+        }
+    }
+
+    func addRecipe(
+        name: String,
+        ingredients: [IngredientData],
+        image: Data?,
+        notes: String?
+    ) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            container.performBackgroundTask { ctx in
+                let recipe = Recipe(context: ctx)
+                recipe.name = name
+                recipe.image = image
+                recipe.notes = notes
+                for ingData in ingredients {
+                    let ing = Ingredient(context: ctx)
+                    ing.name = ingData.name
+                    ing.unit = ingData.unit
+                    recipe.addToIngredients(ing)
+                }
+                do {
+                    try ctx.save()
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: error)
+                }
             }
         }
     }
     
-    func addRecipe(name: String, ingredients: [IngredientData], image: Data?, notes: String?) -> Future<Void, Error> {
-        Future { [weak self] promise in
-            guard let self = self else { return }
-            let recipe = Recipe(context: self.context)
-            recipe.name = name
-            recipe.image = image
-            recipe.notes = notes
-            
-            for ingredientData in ingredients {
-                let ingredient = Ingredient(context: self.context)
-                ingredient.name = ingredientData.name
-                ingredient.unit = ingredientData.unit
-                recipe.addToIngredients(ingredient)
-            }
-            
-            if self.context.hasChanges {
+    func delete(recipe: Recipe) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            container.performBackgroundTask { ctx in
+                // Obtain a “local” copy in this context
+                let local = ctx.object(with: recipe.objectID)
+                ctx.delete(local)
                 do {
-                    try self.context.save()
-                    promise(.success(()))
+                    try ctx.save()
+                    continuation.resume()
                 } catch {
-                    promise(.failure(error))
+                    continuation.resume(throwing: error)
                 }
-            } else {
-                promise(.success(()))
             }
         }
     }
     
-    func delete(recipe: Recipe) -> Future<Void, Error> {
-        Future { [weak self] promise in
-            guard let self = self else { return }
-            
-            self.context.delete(recipe)
-            if self.context.hasChanges {
+    func update(
+        recipe: Recipe,
+        name: String,
+        ingredients: [IngredientData],
+        image: Data?,
+        notes: String?
+    ) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            container.performBackgroundTask { ctx in
+                let local = ctx.object(with: recipe.objectID) as! Recipe
+                // Update fields
+                local.name = name
+                local.image = image
+                local.notes = notes
+                // Replace ingredients
+                if let existing = local.ingredients?.array as? [Ingredient] {
+                    for ing in existing {
+                        local.removeFromIngredients(ing)
+                        ctx.delete(ing)
+                    }
+                }
+                for ingData in ingredients {
+                    let ing = Ingredient(context: ctx)
+                    ing.name = ingData.name
+                    ing.unit = ingData.unit
+                    local.addToIngredients(ing)
+                }
                 do {
-                    try self.context.save()
-                    promise(.success(()))
+                    try ctx.save()
+                    continuation.resume()
                 } catch {
-                    promise(.failure(error))
+                    continuation.resume(throwing: error)
                 }
-            } else {
-                promise(.success(()))
-            }
-        }
-    }
-    
-    func update(recipe: Recipe, name: String, ingredients: [IngredientData], image: Data?, notes: String?) -> Future<Void, Error> {
-        Future { [weak self] promise in
-            guard let self = self else { return }
-            
-            // Update basic properties
-            recipe.name = name
-            recipe.image = image
-            recipe.notes = notes
-            
-            // Remove all existing ingredients
-            if let existingIngredients = recipe.ingredients?.array as? [Ingredient] {
-                for ingredient in existingIngredients {
-                    recipe.removeFromIngredients(ingredient)
-                    self.context.delete(ingredient)
-                }
-            }
-            
-            // Add new ingredients
-            for ingredientData in ingredients {
-                let ingredient = Ingredient(context: self.context)
-                ingredient.name = ingredientData.name
-                ingredient.unit = ingredientData.unit
-                recipe.addToIngredients(ingredient)
-            }
-            
-            // Save context if there are changes
-            if self.context.hasChanges {
-                do {
-                    try self.context.save()
-                    promise(.success(()))
-                } catch {
-                    promise(.failure(error))
-                }
-            } else {
-                promise(.success(()))
             }
         }
     }

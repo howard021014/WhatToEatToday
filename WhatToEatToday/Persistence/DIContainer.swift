@@ -8,10 +8,12 @@
 import Foundation
 
 class DIContainer {
-    static let shared = DIContainer()
+    let coreDataStack = CoreDataStack.shared
     let coreDataService: CoreDataService
     
-    private init() {
-        self.coreDataService = CoreDataServiceImpl(context: CoreDataStack().container.viewContext)
+    init() {
+        coreDataService = CoreDataServiceImpl(
+            container: coreDataStack.container
+        )
     }
 }

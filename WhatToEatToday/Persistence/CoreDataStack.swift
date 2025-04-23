@@ -9,10 +9,11 @@ import Foundation
 import CoreData
 
 class CoreDataStack {
+    static let shared = CoreDataStack()
     let containerName = "Recipes"
     let container: NSPersistentContainer
     
-    init() {
+    private init() {
         container = NSPersistentContainer(name: containerName)
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
@@ -27,8 +28,19 @@ class CoreDataStack {
                  * The store could not be migrated to the current model version.
                  Check the error message to determine what the actual problem was.
                  */
+                // TODO: Fix this fatalError to something else
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
+        
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+    }
+    
+    func newBackgroundContext() -> NSManagedObjectContext {
+        let bgContext = container.newBackgroundContext()
+        bgContext.automaticallyMergesChangesFromParent = true
+        bgContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        return bgContext
     }
 }
