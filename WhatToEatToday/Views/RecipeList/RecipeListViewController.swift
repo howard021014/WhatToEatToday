@@ -23,8 +23,18 @@ class RecipeListViewController: BaseViewController {
     
     let recipeCellName = "RecipeCell"
     
+    let viewModel: RecipeListViewModel
     private var recipes = [Recipe]()
     private var cancellables = Set<AnyCancellable>()
+    
+    init(viewModel: RecipeListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +43,7 @@ class RecipeListViewController: BaseViewController {
         setupTableView()
         setupViewModelBinding()
         toggleNavigationLeftBarItem()
+        viewModel.fetchRecipes()
     }
     
     private func setupTableView() {
@@ -53,7 +64,7 @@ class RecipeListViewController: BaseViewController {
             .store(in: &cancellables)
     }
     
-    private func handleState(_ state: State) {
+    private func handleState(_ state: State<[Recipe]>) {
         switch state {
         case .idle:
             break
@@ -95,6 +106,7 @@ class RecipeListViewController: BaseViewController {
 extension RecipeListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let viewModel = RecipeViewModel()
         show(RecipeDetailViewController(recipe: recipes[indexPath.row], viewModel: viewModel), sender: self)
     }
 }
