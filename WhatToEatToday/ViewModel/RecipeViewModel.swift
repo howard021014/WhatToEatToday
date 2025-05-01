@@ -8,20 +8,20 @@
 import UIKit
 import Combine
 
-enum State {
+enum State<Value> {
     case idle
     case loading
-    case success([Recipe])
+    case success(Value)
     case failure(Error)
 }
 
 class RecipeViewModel {
-    @Published private(set) var state: State = .idle
+    @Published private(set) var state: State<[Recipe]> = .idle
     
     private var cancellables = Set<AnyCancellable>()
     let service: CoreDataService
     
-    init(service: CoreDataService) {
+    init(service: CoreDataService = DIContainer.shared.coreDataService) {
         self.service = service
     }
     

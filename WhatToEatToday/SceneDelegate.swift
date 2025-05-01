@@ -21,8 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
         let viewModel = RecipeViewModel(service: DIContainer.shared.coreDataService)
-        let vc = TabBarViewController(viewModel: viewModel)
-//        let navVC = UINavigationController(rootViewController: vc)
+        let vc = TabBarViewController()
         window?.rootViewController = vc
         
     }
