@@ -106,7 +106,7 @@ class RecipeListViewController: BaseViewController {
 extension RecipeListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let viewModel = RecipeViewModel()
+        let viewModel = RecipeFormViewModel(store: RecipeStore(service: DIContainer.shared.coreDataService))
         show(RecipeDetailViewController(recipe: recipes[indexPath.row], viewModel: viewModel), sender: self)
     }
 }

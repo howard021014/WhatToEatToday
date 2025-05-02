@@ -13,7 +13,7 @@ class RecipeDetailViewController: RecipeBaseTableViewController {
     private var recipe: Recipe
     private var cancellables = Set<AnyCancellable>()
     
-    init(recipe: Recipe, viewModel: RecipeViewModel) {
+    init(recipe: Recipe, viewModel: RecipeFormViewModel) {
         self.recipe = recipe
         super.init(viewModel: viewModel, isEditable: false)
         setOriginalValues()

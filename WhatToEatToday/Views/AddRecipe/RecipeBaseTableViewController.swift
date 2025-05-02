@@ -16,7 +16,7 @@ struct IngredientData {
 
 class RecipeBaseTableViewController: UITableViewController {
 
-    let viewModel: RecipeViewModel
+    let viewModel: RecipeFormViewModel
     
     @Published var isEditable: Bool
     
@@ -33,7 +33,7 @@ class RecipeBaseTableViewController: UITableViewController {
         case image, name, ingredients, notes
     }
     
-    init(viewModel: RecipeViewModel, isEditable: Bool = true) {
+    init(viewModel: RecipeFormViewModel, isEditable: Bool = true) {
         self.viewModel = viewModel
         self.isEditable = isEditable
         super.init(nibName: nil, bundle: nil)
