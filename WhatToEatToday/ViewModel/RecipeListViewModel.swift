@@ -8,15 +8,24 @@
 import Combine
 import Foundation
 
-class RecipeListViewModel: RecipeFeedViewModel {
-
-    func deleteRecipe(_ recipe: Recipe) {
-        service.delete(recipe: recipe)
-            .flatMap { [unowned self] in self.service.fetchRecipes() }
-            .map(State.success)
-            .catch { Just(State.failure($0)) }
-            .receive(on: RunLoop.main)
+class RecipeListViewModel {
+    @Published private(set) var state: State<[Recipe]> = .idle
+    
+    private let store: RecipeStore
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(store: RecipeStore) {
+        self.store = store
+        store.$state
             .assign(to: \.state, on: self)
             .store(in: &cancellables)
+    }
+    
+    func fetchRecipes() {
+        store.fetchRecipes()
+    }
+
+    func deleteRecipe(_ recipe: Recipe) {
+        store.deleteRecipe(recipe)
     }
 }
