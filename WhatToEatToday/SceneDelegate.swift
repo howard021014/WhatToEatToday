@@ -10,6 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var appCoordinator: AppCoordinator!
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -17,14 +18,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        window = UIWindow(frame: windowScene.coordinateSpace.bounds)
-        window?.windowScene = windowScene
-        window?.makeKeyAndVisible()
-        let viewModel = RecipeViewModel(service: DIContainer.shared.coreDataService)
-        let store = RecipeStore(service: DIContainer.shared.coreDataService)
-        let vc = TabBarViewController(store: store)
-        window?.rootViewController = vc
-        
+        let newWindow = UIWindow(frame: windowScene.coordinateSpace.bounds)
+        newWindow.windowScene = windowScene
+        self.window = newWindow
+        self.appCoordinator = AppCoordinator(window: newWindow)
+        appCoordinator.start()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

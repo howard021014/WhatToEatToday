@@ -9,6 +9,8 @@ import UIKit
 
 class BaseViewController: UIViewController {
     
+    var onAddButtonTapped: (() -> Void)?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
@@ -22,9 +24,6 @@ class BaseViewController: UIViewController {
 
     @objc
     func addRecipe() {
-        let viewModel = RecipeFormViewModel(store: RecipeStore(service: DIContainer.shared.coreDataService))
-        let vc = AddRecipeTableViewController(viewModel: viewModel)
-        let nav = UINavigationController(rootViewController: vc)
-        present(nav, animated: true)
+        onAddButtonTapped?()
     }
 }
