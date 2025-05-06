@@ -24,6 +24,9 @@ class RecipeListViewController: BaseViewController {
     let recipeCellName = "RecipeCell"
     
     let viewModel: RecipeListViewModel
+
+    var onSelectRecipe: ((Recipe) -> Void)?
+    
     private var recipes = [Recipe]()
     private var cancellables = Set<AnyCancellable>()
     
@@ -106,8 +109,7 @@ class RecipeListViewController: BaseViewController {
 extension RecipeListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let viewModel = RecipeFormViewModel(store: RecipeStore(service: DIContainer.shared.coreDataService))
-        show(RecipeDetailViewController(recipe: recipes[indexPath.row], viewModel: viewModel), sender: self)
+        onSelectRecipe?(recipes[indexPath.row])
     }
 }
 
