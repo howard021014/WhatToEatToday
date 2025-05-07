@@ -16,7 +16,7 @@ enum RecipeFormMode: Equatable {
 
 class RecipeDraft: ObservableObject {
     var recipeImage: UIImage? = nil
-    var recipeName: String = ""
+    @Published var recipeName: String = ""
     var ingredients: [IngredientData] = []
     var recipeNotes: String? = nil
     
@@ -40,7 +40,8 @@ class RecipeDraft: ObservableObject {
 class RecipeFormViewModel {
     @Published private(set) var state: State<[Recipe]> = .idle
     @Published private(set) var isEditable: Bool = true
-    
+    @Published private(set) var isValid: Bool = false
+
     let mode: RecipeFormMode
     var draft: RecipeDraft
     private let store: RecipeStore
@@ -68,6 +69,11 @@ class RecipeFormViewModel {
             self.draft = loaded
             self.originalDraft = draft.copy()
         }
+        
+        draft.$recipeName
+            .map { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+            .assign(to: \.isValid, on: self)
+            .store(in: &cancellables)
     }
     
     func saveOrUpdate() {
@@ -92,8 +98,8 @@ class RecipeFormViewModel {
             draft.recipeName = originalDraft.recipeName
             draft.ingredients = originalDraft.ingredients
             draft.recipeNotes = originalDraft.recipeNotes
-            isEditable = false
         }
+        isEditable = false
     }
 
     func updateRecipe(_ recipe: Recipe, name: String, ingredients: [IngredientData], image: UIImage?, notes: String?) {

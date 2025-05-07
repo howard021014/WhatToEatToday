@@ -101,6 +101,13 @@ class RecipeFormViewController: UITableViewController {
                 self?.updateNavBarItems(for: editable)
             }
             .store(in: &cancellables)
+        
+        viewModel.$isValid
+            .receive(on: RunLoop.main)
+            .sink { [weak self] isValid in
+                self?.navigationItem.rightBarButtonItem?.isEnabled = isValid
+            }
+            .store(in: &cancellables)
     }
     
     private func registerCells() {
@@ -193,11 +200,9 @@ class RecipeFormViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: RecipeNameCell.identifier, for: indexPath) as? RecipeNameCell else {
             return UITableViewCell()
         }
-        
-        cell.configure(with: viewModel.draft.recipeName)
-        cell.setEditable(viewModel.isEditable)
-        
-        cell.delegate = self
+
+        cell.bind(to: viewModel)
+
         return cell
     }
     
