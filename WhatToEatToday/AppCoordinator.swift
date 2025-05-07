@@ -59,15 +59,15 @@ final class AppCoordinator {
     }
     
     private func showAddRecipeForm() {
-        let formVM = RecipeFormViewModel(store: store)
-        let addVC = AddRecipeTableViewController(viewModel: formVM)
+        let formVM = RecipeFormViewModel(mode: .create, store: store)
+        let addVC = RecipeFormViewController(viewModel: formVM)
         let navVC = UINavigationController(rootViewController: addVC)
         tabBar.present(navVC, animated: true)
     }
     
     private func showDetailRecipeForm(_ recipe: Recipe) {
-        let formVM = RecipeFormViewModel(store: store)
-        let detailVC = RecipeDetailViewController(recipe: recipe, viewModel: formVM)
+        let formVM = RecipeFormViewModel(mode: .edit(existing: recipe), store: store)
+        let detailVC = RecipeFormViewController(viewModel: formVM)
         listNav.pushViewController(detailVC, animated: true)
     }
 }

@@ -10,7 +10,6 @@
 		DC2713EE2C28BC53007F54E9 /* Recipes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DC2713EC2C28BC53007F54E9 /* Recipes.xcdatamodeld */; };
 		DC2714252C2B6DB5007F54E9 /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC2714242C2B6DB5007F54E9 /* RecipeViewModel.swift */; };
 		DC58E6782C557AE500B260D3 /* SlotMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E6772C557AE500B260D3 /* SlotMachineViewController.swift */; };
-		DC58E67D2C56DCFC00B260D3 /* AddRecipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E67C2C56DCFC00B260D3 /* AddRecipeTableViewController.swift */; };
 		DC58E67F2C56DE0300B260D3 /* RecipeImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E67E2C56DE0300B260D3 /* RecipeImageCell.swift */; };
 		DC58E6812C56E12400B260D3 /* RecipeNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E6802C56E12400B260D3 /* RecipeNameCell.swift */; };
 		DC58E6832C56E27700B260D3 /* RecipeNotesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E6822C56E27700B260D3 /* RecipeNotesCell.swift */; };
@@ -24,7 +23,7 @@
 		DC5AD0612CD47329000C785D /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD0602CD47329000C785D /* CoreDataStack.swift */; };
 		DC5AD0632CD4738B000C785D /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD0622CD4738B000C785D /* DIContainer.swift */; };
 		DC5AD1022CE44DDB000C785D /* SlotMachineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD1012CE44DDB000C785D /* SlotMachineView.swift */; };
-		DC5AD1122D1271FA000C785D /* RecipeBaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD1112D1271FA000C785D /* RecipeBaseTableViewController.swift */; };
+		DC5AD1122D1271FA000C785D /* RecipeFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD1112D1271FA000C785D /* RecipeFormViewController.swift */; };
 		DC5AD1142D1278F0000C785D /* EditableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD1132D1278F0000C785D /* EditableCell.swift */; };
 		DC5AD11C2DC2FC8E000C785D /* RecipeListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD11B2DC2FC8E000C785D /* RecipeListViewModel.swift */; };
 		DC5AD11E2DC303F1000C785D /* SlotMachineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD11D2DC303F1000C785D /* SlotMachineViewModel.swift */; };
@@ -38,7 +37,6 @@
 		DCCC12C52BD7030100BB0D0F /* Base in Resources */ = {isa = PBXBuildFile; fileRef = DCCC12C42BD7030100BB0D0F /* Base */; };
 		DCCC12CD2BD705F500BB0D0F /* RecipeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCCC12CC2BD705F500BB0D0F /* RecipeListViewController.swift */; };
 		DCCC12CF2BD706DA00BB0D0F /* RecipeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCCC12CE2BD706DA00BB0D0F /* RecipeCell.swift */; };
-		DCCC12D12BD70ABE00BB0D0F /* RecipeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCCC12D02BD70ABE00BB0D0F /* RecipeDetailViewController.swift */; };
 		DCCC12D72BDAF9A300BB0D0F /* IngredientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCCC12D62BDAF9A300BB0D0F /* IngredientCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -46,7 +44,6 @@
 		DC2713ED2C28BC53007F54E9 /* Recipe.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Recipe.xcdatamodel; sourceTree = "<group>"; };
 		DC2714242C2B6DB5007F54E9 /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
 		DC58E6772C557AE500B260D3 /* SlotMachineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotMachineViewController.swift; sourceTree = "<group>"; };
-		DC58E67C2C56DCFC00B260D3 /* AddRecipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRecipeTableViewController.swift; sourceTree = "<group>"; };
 		DC58E67E2C56DE0300B260D3 /* RecipeImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeImageCell.swift; sourceTree = "<group>"; };
 		DC58E6802C56E12400B260D3 /* RecipeNameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeNameCell.swift; sourceTree = "<group>"; };
 		DC58E6822C56E27700B260D3 /* RecipeNotesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeNotesCell.swift; sourceTree = "<group>"; };
@@ -60,7 +57,7 @@
 		DC5AD0602CD47329000C785D /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		DC5AD0622CD4738B000C785D /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		DC5AD1012CE44DDB000C785D /* SlotMachineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotMachineView.swift; sourceTree = "<group>"; };
-		DC5AD1112D1271FA000C785D /* RecipeBaseTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeBaseTableViewController.swift; sourceTree = "<group>"; };
+		DC5AD1112D1271FA000C785D /* RecipeFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeFormViewController.swift; sourceTree = "<group>"; };
 		DC5AD1132D1278F0000C785D /* EditableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableCell.swift; sourceTree = "<group>"; };
 		DC5AD11B2DC2FC8E000C785D /* RecipeListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListViewModel.swift; sourceTree = "<group>"; };
 		DC5AD11D2DC303F1000C785D /* SlotMachineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotMachineViewModel.swift; sourceTree = "<group>"; };
@@ -76,7 +73,6 @@
 		DCCC12C62BD7030100BB0D0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DCCC12CC2BD705F500BB0D0F /* RecipeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListViewController.swift; sourceTree = "<group>"; };
 		DCCC12CE2BD706DA00BB0D0F /* RecipeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCell.swift; sourceTree = "<group>"; };
-		DCCC12D02BD70ABE00BB0D0F /* RecipeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailViewController.swift; sourceTree = "<group>"; };
 		DCCC12D62BDAF9A300BB0D0F /* IngredientCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,21 +92,12 @@
 			children = (
 				DC5AD10A2CE99D26000C785D /* Recipe */,
 				DC5AD1082CE99D11000C785D /* Ingredients */,
-				DC58E67C2C56DCFC00B260D3 /* AddRecipeTableViewController.swift */,
 				DC58E68C2C65AB5300B260D3 /* TextFieldDelegate.swift */,
 				DC58E6862C6457FA00B260D3 /* PaddedTextField.swift */,
-				DC5AD1112D1271FA000C785D /* RecipeBaseTableViewController.swift */,
+				DC5AD1112D1271FA000C785D /* RecipeFormViewController.swift */,
 				DC5AD1132D1278F0000C785D /* EditableCell.swift */,
 			);
 			path = AddRecipe;
-			sourceTree = "<group>";
-		};
-		DC2713E32C24C820007F54E9 /* RecipeDetail */ = {
-			isa = PBXGroup;
-			children = (
-				DCCC12D02BD70ABE00BB0D0F /* RecipeDetailViewController.swift */,
-			);
-			path = RecipeDetail;
 			sourceTree = "<group>";
 		};
 		DC2713E42C24C82A007F54E9 /* RecipeList */ = {
@@ -169,7 +156,6 @@
 				DC5AD10B2CE99D47000C785D /* StateView */,
 				DC5AD1052CE99CAE000C785D /* SlotMachine */,
 				DC2713E42C24C82A007F54E9 /* RecipeList */,
-				DC2713E32C24C820007F54E9 /* RecipeDetail */,
 				DC2713E12C24C80F007F54E9 /* AddRecipe */,
 			);
 			path = Views;
@@ -316,7 +302,6 @@
 				DC5AD1142D1278F0000C785D /* EditableCell.swift in Sources */,
 				DC58E6892C645DF900B260D3 /* IngredientCollectionViewCell.swift in Sources */,
 				DC5AD05F2CD320C2000C785D /* CoreDataService.swift in Sources */,
-				DC58E67D2C56DCFC00B260D3 /* AddRecipeTableViewController.swift in Sources */,
 				DCCC12CD2BD705F500BB0D0F /* RecipeListViewController.swift in Sources */,
 				DC5AD11C2DC2FC8E000C785D /* RecipeListViewModel.swift in Sources */,
 				DC5AD12A2DC9A176000C785D /* BaseViewController.swift in Sources */,
@@ -328,12 +313,11 @@
 				DC58E6812C56E12400B260D3 /* RecipeNameCell.swift in Sources */,
 				DC5AD1242DC943FF000C785D /* AppCoordinator.swift in Sources */,
 				DC5AD0612CD47329000C785D /* CoreDataStack.swift in Sources */,
-				DCCC12D12BD70ABE00BB0D0F /* RecipeDetailViewController.swift in Sources */,
 				DC2714252C2B6DB5007F54E9 /* RecipeViewModel.swift in Sources */,
 				DC58E68B2C645EAB00B260D3 /* UIView+Extension.swift in Sources */,
 				DC58E6782C557AE500B260D3 /* SlotMachineViewController.swift in Sources */,
 				DC2713EE2C28BC53007F54E9 /* Recipes.xcdatamodeld in Sources */,
-				DC5AD1122D1271FA000C785D /* RecipeBaseTableViewController.swift in Sources */,
+				DC5AD1122D1271FA000C785D /* RecipeFormViewController.swift in Sources */,
 				DCCC12BB2BD702FF00BB0D0F /* SceneDelegate.swift in Sources */,
 				DC5AD0632CD4738B000C785D /* DIContainer.swift in Sources */,
 				DC58E67F2C56DE0300B260D3 /* RecipeImageCell.swift in Sources */,
