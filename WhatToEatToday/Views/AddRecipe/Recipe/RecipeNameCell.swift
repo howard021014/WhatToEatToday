@@ -5,6 +5,7 @@
 //  Created by Howard tsai on 2024-07-28.
 //
 
+import Combine
 import UIKit
 
 class RecipeNameCell: UITableViewCell, UITextFieldDelegate, EditableCell {
@@ -21,6 +22,15 @@ class RecipeNameCell: UITableViewCell, UITextFieldDelegate, EditableCell {
     
     weak var delegate: TextFieldCellDelegate?
     
+    private lazy var textPublisher: AnyPublisher<String, Never> = {
+        NotificationCenter.default
+            .publisher(for: UITextField.textDidChangeNotification, object: recipeNameTextField)
+            .compactMap { ($0.object as? UITextField)?.text }
+            .eraseToAnyPublisher()
+    }()
+    
+    private var cancellables = Set<AnyCancellable>()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -28,6 +38,11 @@ class RecipeNameCell: UITableViewCell, UITextFieldDelegate, EditableCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cancellables.removeAll()
     }
     
     private func setupUI() {
@@ -50,6 +65,33 @@ class RecipeNameCell: UITableViewCell, UITextFieldDelegate, EditableCell {
         recipeNameTextField.layer.masksToBounds = true
     }
     
+    func bind(to viewModel: RecipeFormViewModel) {
+        // Emits text and assign to view model property (UI -> VM)
+        textPublisher
+            .receive(on: RunLoop.main)
+            .assign(to: \.draft.recipeName, on: viewModel)
+            .store(in: &cancellables)
+        
+        // View model updates the UI with the new text (VM -> UI)
+        viewModel.draft.$recipeName
+            .receive(on: RunLoop.main)
+            .sink { [weak self] newText in
+                if self?.recipeNameTextField.text != newText {
+                    self?.recipeNameTextField.text = newText
+                }
+            }
+            .store(in: &cancellables)
+        
+        // Toggles the editable state based on view model (VM -> UI)
+        viewModel.$isEditable
+            .receive(on: RunLoop.main)
+            .sink { [weak self] editable in
+                self?.setEditable(editable)
+            }
+            .store(in: &cancellables)
+        
+    }
+    
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
         guard let enteredText = textField.text, enteredText != textField.placeholder, !enteredText.isEmpty else {
             return
@@ -61,10 +103,6 @@ class RecipeNameCell: UITableViewCell, UITextFieldDelegate, EditableCell {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         recipeNameTextField.resignFirstResponder()
         return true
-    }
-    
-    func configure(with text: String?) {
-        recipeNameTextField.text = text
     }
     
     func setEditable(_ editable: Bool) {
