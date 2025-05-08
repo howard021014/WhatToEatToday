@@ -226,10 +226,7 @@ class RecipeFormViewController: UITableViewController {
             return UITableViewCell()
         }
         
-        cell.configure(with: viewModel.draft.recipeNotes)
-        cell.setEditable(viewModel.isEditable)
-
-        cell.delegate = self
+        cell.bind(to: viewModel)
         return cell
     }
     
@@ -319,20 +316,6 @@ class RecipeFormViewController: UITableViewController {
             viewModel.draft.ingredients.append(IngredientData())
             tableView.insertRows(at: [IndexPath(row: viewModel.draft.ingredients.count - 1, section: section)], 
                                  with: .automatic)
-        }
-    }
-}
-
-extension RecipeFormViewController: TextFieldCellDelegate {
-    func textDidChange(for view: TextFieldTag, text: String?) {
-        guard let text else {
-            return
-        }
-        switch view {
-        case .name:
-            viewModel.draft.recipeName = text
-        case .notes:
-            viewModel.draft.recipeNotes = text
         }
     }
 }

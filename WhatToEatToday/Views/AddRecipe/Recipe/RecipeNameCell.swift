@@ -20,8 +20,6 @@ class RecipeNameCell: UITableViewCell, UITextFieldDelegate, EditableCell {
         return textField
     }()
     
-    weak var delegate: TextFieldCellDelegate?
-    
     private lazy var textPublisher: AnyPublisher<String, Never> = {
         NotificationCenter.default
             .publisher(for: UITextField.textDidChangeNotification, object: recipeNameTextField)
@@ -38,11 +36,6 @@ class RecipeNameCell: UITableViewCell, UITextFieldDelegate, EditableCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        cancellables.removeAll()
     }
     
     private func setupUI() {
@@ -69,18 +62,7 @@ class RecipeNameCell: UITableViewCell, UITextFieldDelegate, EditableCell {
         // Emits text and assign to view model property (UI -> VM)
         textPublisher
             .receive(on: RunLoop.main)
-            .assign(to: \.draft.recipeName, on: viewModel)
-            .store(in: &cancellables)
-        
-        // View model updates the UI with the new text (VM -> UI)
-        viewModel.draft.$recipeName
-            .receive(on: RunLoop.main)
-            .sink { [weak self] newText in
-                if self?.recipeNameTextField.text != newText {
-                    self?.recipeNameTextField.text = newText
-                }
-            }
-            .store(in: &cancellables)
+            .assign(to: &viewModel.draft.$recipeName)
         
         // Toggles the editable state based on view model (VM -> UI)
         viewModel.$isEditable
@@ -89,17 +71,8 @@ class RecipeNameCell: UITableViewCell, UITextFieldDelegate, EditableCell {
                 self?.setEditable(editable)
             }
             .store(in: &cancellables)
-        
     }
-    
-    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
-        guard let enteredText = textField.text, enteredText != textField.placeholder, !enteredText.isEmpty else {
-            return
-        }
 
-        delegate?.textDidChange(for: .name, text: enteredText)
-    }
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         recipeNameTextField.resignFirstResponder()
         return true
