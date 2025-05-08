@@ -17,7 +17,6 @@
 		DC58E6872C6457FA00B260D3 /* PaddedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E6862C6457FA00B260D3 /* PaddedTextField.swift */; };
 		DC58E6892C645DF900B260D3 /* IngredientCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E6882C645DF900B260D3 /* IngredientCollectionViewCell.swift */; };
 		DC58E68B2C645EAB00B260D3 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E68A2C645EAB00B260D3 /* UIView+Extension.swift */; };
-		DC58E68D2C65AB5300B260D3 /* TextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E68C2C65AB5300B260D3 /* TextFieldDelegate.swift */; };
 		DC5AD05C2CC9E2EB000C785D /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD05B2CC9E2EB000C785D /* EmptyView.swift */; };
 		DC5AD05F2CD320C2000C785D /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD05E2CD320C2000C785D /* CoreDataService.swift */; };
 		DC5AD0612CD47329000C785D /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD0602CD47329000C785D /* CoreDataStack.swift */; };
@@ -51,7 +50,6 @@
 		DC58E6862C6457FA00B260D3 /* PaddedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PaddedTextField.swift; path = WhatToEatToday/PaddedTextField.swift; sourceTree = SOURCE_ROOT; };
 		DC58E6882C645DF900B260D3 /* IngredientCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientCollectionViewCell.swift; sourceTree = "<group>"; };
 		DC58E68A2C645EAB00B260D3 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
-		DC58E68C2C65AB5300B260D3 /* TextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldDelegate.swift; sourceTree = "<group>"; };
 		DC5AD05B2CC9E2EB000C785D /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		DC5AD05E2CD320C2000C785D /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		DC5AD0602CD47329000C785D /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
@@ -92,7 +90,6 @@
 			children = (
 				DC5AD10A2CE99D26000C785D /* Recipe */,
 				DC5AD1082CE99D11000C785D /* Ingredients */,
-				DC58E68C2C65AB5300B260D3 /* TextFieldDelegate.swift */,
 				DC58E6862C6457FA00B260D3 /* PaddedTextField.swift */,
 				DC5AD1112D1271FA000C785D /* RecipeFormViewController.swift */,
 				DC5AD1132D1278F0000C785D /* EditableCell.swift */,
@@ -296,7 +293,6 @@
 				DCCC12CF2BD706DA00BB0D0F /* RecipeCell.swift in Sources */,
 				DC5AD05C2CC9E2EB000C785D /* EmptyView.swift in Sources */,
 				DCCC12D72BDAF9A300BB0D0F /* IngredientCell.swift in Sources */,
-				DC58E68D2C65AB5300B260D3 /* TextFieldDelegate.swift in Sources */,
 				DC5AD11E2DC303F1000C785D /* SlotMachineViewModel.swift in Sources */,
 				DC58E6852C56E8B800B260D3 /* IngredientsHeaderView.swift in Sources */,
 				DC5AD1142D1278F0000C785D /* EditableCell.swift in Sources */,

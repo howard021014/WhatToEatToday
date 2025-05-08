@@ -18,7 +18,7 @@ class RecipeDraft: ObservableObject {
     var recipeImage: UIImage? = nil
     @Published var recipeName: String = ""
     var ingredients: [IngredientData] = []
-    var recipeNotes: String? = nil
+    @Published var recipeNotes: String? = nil
     
     init(recipeImage: UIImage? = nil, recipeName: String = "", ingredients: [IngredientData] = [], recipeNotes: String? = nil) {
         self.recipeImage = recipeImage
