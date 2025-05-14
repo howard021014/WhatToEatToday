@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-class RecipeNameCell: UITableViewCell, UITextFieldDelegate, EditableCell {
+class RecipeNameCell: UITableViewCell, UITextFieldDelegate {
 
     static let identifier = "RecipeNameCell"
     
@@ -19,14 +19,7 @@ class RecipeNameCell: UITableViewCell, UITextFieldDelegate, EditableCell {
         textField.placeholder = "Enter a name for your recipe"
         return textField
     }()
-    
-    private lazy var textPublisher: AnyPublisher<String, Never> = {
-        NotificationCenter.default
-            .publisher(for: UITextField.textDidChangeNotification, object: recipeNameTextField)
-            .compactMap { ($0.object as? UITextField)?.text }
-            .eraseToAnyPublisher()
-    }()
-    
+
     private var cancellables = Set<AnyCancellable>()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -39,7 +32,6 @@ class RecipeNameCell: UITableViewCell, UITextFieldDelegate, EditableCell {
     }
     
     private func setupUI() {
-        setUpBorder()
         recipeNameTextField.delegate = self
         contentView.addSubview(recipeNameTextField)
         
@@ -51,24 +43,27 @@ class RecipeNameCell: UITableViewCell, UITextFieldDelegate, EditableCell {
         ])
     }
     
-    private func setUpBorder() {
-        recipeNameTextField.layer.cornerRadius = 8
-        recipeNameTextField.layer.borderWidth = 0.6
-        recipeNameTextField.layer.borderColor = UIColor.black.cgColor
-        recipeNameTextField.layer.masksToBounds = true
-    }
-    
     func bind(to viewModel: RecipeFormViewModel) {
         // Emits text and assign to view model property (UI -> VM)
-        textPublisher
+        recipeNameTextField.textDidChangePublisher
             .receive(on: RunLoop.main)
             .assign(to: &viewModel.draft.$recipeName)
+        
+        // View model updates the UI with the new text (VM -> UI)
+        viewModel.draft.$recipeName
+            .receive(on: RunLoop.main)
+            .sink { [weak self] newText in
+                if self?.recipeNameTextField.text != newText {
+                    self?.recipeNameTextField.text = newText
+                }
+            }
+            .store(in: &cancellables)
         
         // Toggles the editable state based on view model (VM -> UI)
         viewModel.$isEditable
             .receive(on: RunLoop.main)
-            .sink { [weak self] editable in
-                self?.setEditable(editable)
+            .sink { [weak self] isEditable in
+                self?.recipeNameTextField.setEditable(isEditable)
             }
             .store(in: &cancellables)
     }
@@ -76,10 +71,5 @@ class RecipeNameCell: UITableViewCell, UITextFieldDelegate, EditableCell {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         recipeNameTextField.resignFirstResponder()
         return true
-    }
-    
-    func setEditable(_ editable: Bool) {
-        recipeNameTextField.isEnabled = editable
-        recipeNameTextField.backgroundColor = editable ? .systemBackground : .systemGray6
     }
 }

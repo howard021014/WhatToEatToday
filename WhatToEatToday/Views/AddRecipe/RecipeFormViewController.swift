@@ -115,7 +115,6 @@ class RecipeFormViewController: UITableViewController {
         tableView.register(RecipeNameCell.self, forCellReuseIdentifier: RecipeNameCell.identifier)
         tableView.register(RecipeNotesCell.self, forCellReuseIdentifier: RecipeNotesCell.identifier)
         tableView.register(IngredientCell.self, forCellReuseIdentifier: IngredientCell.identifier)
-        tableView.register(IngredientsHeaderView.self, forHeaderFooterViewReuseIdentifier: IngredientsHeaderView.identifier)
     }
     
     func showImagePicker() {
@@ -136,7 +135,7 @@ class RecipeFormViewController: UITableViewController {
     @objc
     private func saveOrUpdate() {
         if viewModel.isEditable {
-            view.endEditing(true)
+            finishEditing()
             viewModel.saveOrUpdate()
             dismiss(animated: true)
         }
@@ -145,7 +144,7 @@ class RecipeFormViewController: UITableViewController {
     
     @objc
     private func cancel() {
-        view.endEditing(true)
+        finishEditing()
         viewModel.cancelEdit()
         tableView.reloadData()
         dismiss(animated: true)
@@ -202,7 +201,6 @@ class RecipeFormViewController: UITableViewController {
         }
 
         cell.bind(to: viewModel)
-
         return cell
     }
     
@@ -211,13 +209,7 @@ class RecipeFormViewController: UITableViewController {
             return UITableViewCell()
         }
 
-        cell.configure(with: viewModel.draft.ingredients[indexPath.row])
-        cell.setEditable(viewModel.isEditable)
-        
-        
-        cell.onIngredientDataUpdate = { [weak self] updatedData in
-            self?.viewModel.draft.ingredients[indexPath.row] = updatedData
-        }
+        cell.bind(to: viewModel, at: indexPath)
         return cell
     }
     
