@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-class RecipeNotesCell: UITableViewCell, UITextViewDelegate, EditableCell {
+class RecipeNotesCell: UITableViewCell, UITextViewDelegate {
     
     static let identifier = "RecipeNotesCell"
     
@@ -26,7 +26,10 @@ class RecipeNotesCell: UITableViewCell, UITextViewDelegate, EditableCell {
     lazy var textPublisher: AnyPublisher<String, Never> = {
         NotificationCenter.default
             .publisher(for: UITextView.textDidChangeNotification, object: notesView)
-            .compactMap { ($0.object as? UITextView)?.text }
+            .compactMap {
+                let text = ($0.object as? UITextView)?.text
+                return text
+            }
             .eraseToAnyPublisher()
     }()
 
@@ -68,6 +71,17 @@ class RecipeNotesCell: UITableViewCell, UITextViewDelegate, EditableCell {
             .receive(on: RunLoop.main)
             .sink { [weak viewModel] text in
                 viewModel?.draft.recipeNotes = text
+            }
+            .store(in: &cancellables)
+        
+        viewModel.draft.$recipeNotes
+            .receive(on: RunLoop.main)
+            .sink { [weak self] newNotes in
+                if newNotes.isEmpty {
+                    self?.notesView.text = self?.placeHolderText
+                } else if self?.notesView.text != newNotes {
+                    self?.notesView.text = newNotes
+                }
             }
             .store(in: &cancellables)
 

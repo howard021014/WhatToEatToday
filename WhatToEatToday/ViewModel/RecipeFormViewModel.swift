@@ -14,13 +14,13 @@ enum RecipeFormMode: Equatable {
     case edit(existing: Recipe)
 }
 
-class RecipeDraft: ObservableObject {
+class RecipeDraft: ObservableObject, CustomDebugStringConvertible {
     var recipeImage: UIImage? = nil
     @Published var recipeName: String = ""
-    var ingredients: [IngredientData] = []
-    @Published var recipeNotes: String? = nil
+    @Published var ingredients: [IngredientData] = []
+    @Published var recipeNotes: String = ""
     
-    init(recipeImage: UIImage? = nil, recipeName: String = "", ingredients: [IngredientData] = [], recipeNotes: String? = nil) {
+    init(recipeImage: UIImage? = nil, recipeName: String = "", ingredients: [IngredientData] = [], recipeNotes: String = "") {
         self.recipeImage = recipeImage
         self.recipeName = recipeName
         self.ingredients = ingredients
@@ -34,6 +34,10 @@ class RecipeDraft: ObservableObject {
             ingredients: self.ingredients,
             recipeNotes: self.recipeNotes
         )
+    }
+    
+    var debugDescription: String {
+        "Name: \(recipeName), ingredients: \(ingredients)"
     }
 }
 
