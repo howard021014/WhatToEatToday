@@ -42,7 +42,7 @@ class RecipeListViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
+        title = "Recipes"
         setupTableView()
         setupViewModelBinding()
         toggleNavigationLeftBarItem()

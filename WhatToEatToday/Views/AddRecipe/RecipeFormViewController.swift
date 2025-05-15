@@ -17,12 +17,9 @@ struct IngredientData {
 class RecipeFormViewController: UITableViewController {
 
     let viewModel: RecipeFormViewModel
-    var ingredientData = [IngredientData]()
-    var recipeName: String?
-    var recipeNotes: String?
-    var recipeImage: UIImage?
-    
+
     private var cancellables = Set<AnyCancellable>()
+    private var addIngredientButton: UIButton?
     
     enum TableSection: Int {
         case image, name, ingredients, notes
@@ -99,6 +96,7 @@ class RecipeFormViewController: UITableViewController {
             .sink { [weak self] editable in
                 self?.tableView.reloadData()
                 self?.updateNavBarItems(for: editable)
+                self?.toggleIngredientButtonVisibility(editable)
             }
             .store(in: &cancellables)
         
@@ -266,22 +264,22 @@ class RecipeFormViewController: UITableViewController {
             let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") ?? UITableViewHeaderFooterView(reuseIdentifier: "header")
             
             // Add a button to the header view
-            let addButton = UIButton(type: .system)
-            addButton.translatesAutoresizingMaskIntoConstraints = false
-            addButton.setImage(UIImage(systemName: "plus")!, for: .normal)
-            addButton.tag = section
-            addButton.addTarget(self, action: #selector(addNewIngredientRow(_:)), for: .touchUpInside)
-            
-            addButton.isEnabled = viewModel.isEditable
-            addButton.isUserInteractionEnabled = viewModel.isEditable
+            if addIngredientButton == nil {
+                let addButton = UIButton(type: .system)
+                addButton.translatesAutoresizingMaskIntoConstraints = false
+                addButton.setImage(UIImage(systemName: "plus")!, for: .normal)
+                addButton.tag = section
+                addButton.addTarget(self, action: #selector(addNewIngredientRow(_:)), for: .touchUpInside)
 
-            headerView.contentView.addSubview(addButton)
-            NSLayoutConstraint.activate([
-                addButton.trailingAnchor.constraint(equalTo: headerView.contentView.trailingAnchor, constant: -10),
-                addButton.centerYAnchor.constraint(equalTo: headerView.contentView.centerYAnchor),
-                addButton.heightAnchor.constraint(equalToConstant: 18.0),
-                addButton.widthAnchor.constraint(equalToConstant: 18.0)
-            ])
+                headerView.contentView.addSubview(addButton)
+                NSLayoutConstraint.activate([
+                    addButton.trailingAnchor.constraint(equalTo: headerView.contentView.trailingAnchor, constant: -10),
+                    addButton.centerYAnchor.constraint(equalTo: headerView.contentView.centerYAnchor),
+                    addButton.heightAnchor.constraint(equalToConstant: 18.0),
+                    addButton.widthAnchor.constraint(equalToConstant: 18.0)
+                ])
+                self.addIngredientButton = addButton
+            }
 
             return headerView
         }
@@ -309,6 +307,11 @@ class RecipeFormViewController: UITableViewController {
             tableView.insertRows(at: [IndexPath(row: viewModel.draft.ingredients.count - 1, section: section)], 
                                  with: .automatic)
         }
+    }
+    
+    private func toggleIngredientButtonVisibility(_ editable: Bool) {
+        self.addIngredientButton?.isEnabled = editable
+        self.addIngredientButton?.isUserInteractionEnabled = editable
     }
 }
 
