@@ -5,13 +5,13 @@
 //  Created by Howard tsai on 2024-07-28.
 //
 
+import Combine
 import UIKit
 
-class RecipeImageCell: UITableViewCell, EditableCell {
+class RecipeImageCell: UITableViewCell {
     
     static let identifier = "RecipeImageCell"
-    var onUploadButtonTapped: (() -> Void)?
-    
+
     let recipeImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -26,6 +26,10 @@ class RecipeImageCell: UITableViewCell, EditableCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    private var cancellables = Set<AnyCancellable>()
+    var onUploadButtonTapped: (() -> Void)?
+    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -54,16 +58,26 @@ class RecipeImageCell: UITableViewCell, EditableCell {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(uploadButtonTapped))
         recipeImageView.addGestureRecognizer(tapGesture)
         recipeImageView.isUserInteractionEnabled = true
-
-        configure(with: nil)
-    }
-    
-    @objc
-    private func uploadButtonTapped() {
-        onUploadButtonTapped?()
     }
 
-    func configure(with image: UIImage?) {
+    func bind(to viewModel: RecipeFormViewModel) {
+
+        viewModel.draft.$recipeImage
+            .receive(on: RunLoop.main)
+            .sink { [weak self] image in
+                self?.configure(with: image)
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$isEditable
+            .receive(on: RunLoop.main)
+            .sink { [weak self] editable in
+                self?.recipeImageView.isUserInteractionEnabled = editable
+            }
+            .store(in: &cancellables)
+    }
+
+    private func configure(with image: UIImage?) {
         if let image {
             recipeImageView.image = image
             uploadButton.isHidden = true
@@ -73,8 +87,10 @@ class RecipeImageCell: UITableViewCell, EditableCell {
             recipeImageView.isHidden = true
         }
     }
-    
-    func setEditable(_ editable: Bool) {
-        recipeImageView.isUserInteractionEnabled = editable
+
+    @objc
+    private func uploadButtonTapped() {
+        onUploadButtonTapped?()
     }
+    
 }

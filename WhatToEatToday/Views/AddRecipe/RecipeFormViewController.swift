@@ -186,12 +186,12 @@ class RecipeFormViewController: UITableViewController {
             return UITableViewCell()
         }
         
-        cell.configure(with: viewModel.draft.recipeImage)
-        cell.setEditable(viewModel.isEditable)
-        
+        cell.bind(to: viewModel)
+
         cell.onUploadButtonTapped = { [weak self] in
             self?.showImagePicker()
         }
+
         return cell
     }
     
@@ -323,7 +323,8 @@ extension RecipeFormViewController: PHPickerViewControllerDelegate {
             if let image = object as? UIImage {
                 DispatchQueue.main.async {
                     self?.viewModel.draft.recipeImage = image
-                    self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+                    self?.tableView.reloadRows(at: [IndexPath(row: 0, section: TableSection.image.rawValue)], 
+                                               with: .automatic)
                 }
             }
         }

@@ -15,7 +15,7 @@ enum RecipeFormMode: Equatable {
 }
 
 class RecipeDraft: ObservableObject, CustomDebugStringConvertible {
-    var recipeImage: UIImage? = nil
+    @Published var recipeImage: UIImage? = nil
     @Published var recipeName: String = ""
     @Published var ingredients: [IngredientData] = []
     @Published var recipeNotes: String = ""
@@ -42,7 +42,6 @@ class RecipeDraft: ObservableObject, CustomDebugStringConvertible {
 }
 
 class RecipeFormViewModel {
-    @Published private(set) var state: State<[Recipe]> = .idle
     @Published private(set) var isEditable: Bool = true
     @Published private(set) var isValid: Bool = false
 
