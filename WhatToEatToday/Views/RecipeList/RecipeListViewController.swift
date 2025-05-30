@@ -54,7 +54,6 @@ class RecipeListViewController: BaseViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(RecipeCell.self, forCellReuseIdentifier: recipeCellName)
-        tableView.backgroundView = loadingIndicator
         tableView.pin(to: view)
     }
     
@@ -72,6 +71,7 @@ class RecipeListViewController: BaseViewController {
         case .idle:
             break
         case .loading:
+            self.tableView.backgroundView = loadingIndicator
             loadingIndicator.startAnimating()
         case .success(let recipes):
             loadingIndicator.stopAnimating()
@@ -84,6 +84,7 @@ class RecipeListViewController: BaseViewController {
             }
             toggleNavigationLeftBarItem()
         case .failure(let error):
+            loadingIndicator.stopAnimating()
             print("Error fetching from data: \(error.localizedDescription)")
         }
     }

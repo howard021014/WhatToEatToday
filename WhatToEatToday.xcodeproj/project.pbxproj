@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		DC2713EE2C28BC53007F54E9 /* Recipes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DC2713EC2C28BC53007F54E9 /* Recipes.xcdatamodeld */; };
-		DC2714252C2B6DB5007F54E9 /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC2714242C2B6DB5007F54E9 /* RecipeViewModel.swift */; };
 		DC58E6782C557AE500B260D3 /* SlotMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E6772C557AE500B260D3 /* SlotMachineViewController.swift */; };
 		DC58E67F2C56DE0300B260D3 /* RecipeImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E67E2C56DE0300B260D3 /* RecipeImageCell.swift */; };
 		DC58E6812C56E12400B260D3 /* RecipeNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC58E6802C56E12400B260D3 /* RecipeNameCell.swift */; };
@@ -19,7 +18,6 @@
 		DC5AD05C2CC9E2EB000C785D /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD05B2CC9E2EB000C785D /* EmptyView.swift */; };
 		DC5AD05F2CD320C2000C785D /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD05E2CD320C2000C785D /* CoreDataService.swift */; };
 		DC5AD0612CD47329000C785D /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD0602CD47329000C785D /* CoreDataStack.swift */; };
-		DC5AD0632CD4738B000C785D /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD0622CD4738B000C785D /* DIContainer.swift */; };
 		DC5AD1022CE44DDB000C785D /* SlotMachineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD1012CE44DDB000C785D /* SlotMachineView.swift */; };
 		DC5AD1122D1271FA000C785D /* RecipeFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD1112D1271FA000C785D /* RecipeFormViewController.swift */; };
 		DC5AD1142D1278F0000C785D /* EditableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD1132D1278F0000C785D /* EditableCell.swift */; };
@@ -29,6 +27,7 @@
 		DC5AD1222DC535EA000C785D /* RecipeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD1212DC535EA000C785D /* RecipeStore.swift */; };
 		DC5AD1242DC943FF000C785D /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD1232DC943FF000C785D /* AppCoordinator.swift */; };
 		DC5AD12A2DC9A176000C785D /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD1292DC9A176000C785D /* BaseViewController.swift */; };
+		DC5AD12C2DEA32D0000C785D /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC5AD12B2DEA32D0000C785D /* State.swift */; };
 		DCCC12B92BD702FF00BB0D0F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCCC12B82BD702FF00BB0D0F /* AppDelegate.swift */; };
 		DCCC12BB2BD702FF00BB0D0F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCCC12BA2BD702FF00BB0D0F /* SceneDelegate.swift */; };
 		DCCC12C22BD7030100BB0D0F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCCC12C12BD7030100BB0D0F /* Assets.xcassets */; };
@@ -40,7 +39,6 @@
 
 /* Begin PBXFileReference section */
 		DC2713ED2C28BC53007F54E9 /* Recipe.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Recipe.xcdatamodel; sourceTree = "<group>"; };
-		DC2714242C2B6DB5007F54E9 /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
 		DC58E6772C557AE500B260D3 /* SlotMachineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotMachineViewController.swift; sourceTree = "<group>"; };
 		DC58E67E2C56DE0300B260D3 /* RecipeImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeImageCell.swift; sourceTree = "<group>"; };
 		DC58E6802C56E12400B260D3 /* RecipeNameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeNameCell.swift; sourceTree = "<group>"; };
@@ -51,7 +49,6 @@
 		DC5AD05B2CC9E2EB000C785D /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		DC5AD05E2CD320C2000C785D /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		DC5AD0602CD47329000C785D /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
-		DC5AD0622CD4738B000C785D /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		DC5AD1012CE44DDB000C785D /* SlotMachineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotMachineView.swift; sourceTree = "<group>"; };
 		DC5AD1112D1271FA000C785D /* RecipeFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeFormViewController.swift; sourceTree = "<group>"; };
 		DC5AD1132D1278F0000C785D /* EditableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableCell.swift; sourceTree = "<group>"; };
@@ -61,6 +58,7 @@
 		DC5AD1212DC535EA000C785D /* RecipeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeStore.swift; sourceTree = "<group>"; };
 		DC5AD1232DC943FF000C785D /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		DC5AD1292DC9A176000C785D /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		DC5AD12B2DEA32D0000C785D /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		DCCC12B52BD702FF00BB0D0F /* WhatToEatToday.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatToEatToday.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCCC12B82BD702FF00BB0D0F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DCCC12BA2BD702FF00BB0D0F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -107,11 +105,11 @@
 		DC58E6792C558FF900B260D3 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				DC2714242C2B6DB5007F54E9 /* RecipeViewModel.swift */,
 				DC5AD11B2DC2FC8E000C785D /* RecipeListViewModel.swift */,
 				DC5AD11D2DC303F1000C785D /* SlotMachineViewModel.swift */,
 				DC5AD11F2DC40869000C785D /* RecipeFormViewModel.swift */,
 				DC5AD1212DC535EA000C785D /* RecipeStore.swift */,
+				DC5AD12B2DEA32D0000C785D /* State.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -122,7 +120,6 @@
 				DC2713EC2C28BC53007F54E9 /* Recipes.xcdatamodeld */,
 				DC5AD05E2CD320C2000C785D /* CoreDataService.swift */,
 				DC5AD0602CD47329000C785D /* CoreDataStack.swift */,
-				DC5AD0622CD4738B000C785D /* DIContainer.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -305,13 +302,12 @@
 				DC58E6812C56E12400B260D3 /* RecipeNameCell.swift in Sources */,
 				DC5AD1242DC943FF000C785D /* AppCoordinator.swift in Sources */,
 				DC5AD0612CD47329000C785D /* CoreDataStack.swift in Sources */,
-				DC2714252C2B6DB5007F54E9 /* RecipeViewModel.swift in Sources */,
+				DC5AD12C2DEA32D0000C785D /* State.swift in Sources */,
 				DC58E68B2C645EAB00B260D3 /* UIView+Extension.swift in Sources */,
 				DC58E6782C557AE500B260D3 /* SlotMachineViewController.swift in Sources */,
 				DC2713EE2C28BC53007F54E9 /* Recipes.xcdatamodeld in Sources */,
 				DC5AD1122D1271FA000C785D /* RecipeFormViewController.swift in Sources */,
 				DCCC12BB2BD702FF00BB0D0F /* SceneDelegate.swift in Sources */,
-				DC5AD0632CD4738B000C785D /* DIContainer.swift in Sources */,
 				DC58E67F2C56DE0300B260D3 /* RecipeImageCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

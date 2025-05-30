@@ -31,8 +31,9 @@ class RecipeStore {
     
     func addRecipe(name: String, ingredients: [IngredientData], image: UIImage?, notes: String?) {
         service.addRecipe(name: name, ingredients: ingredients, image: image?.pngData(), notes: notes)
-            .flatMap{ [unowned self] in self.service.fetchRecipes() }
+            .flatMap { [unowned self] in self.service.fetchRecipes() }
             .map(State.success)
+            .prepend(.loading)
             .catch { Just(State.failure($0)) }
             .receive(on: RunLoop.main)
             .assign(to: \.state, on: self)
@@ -43,6 +44,7 @@ class RecipeStore {
         service.delete(recipe: recipe)
             .flatMap { [unowned self] in self.service.fetchRecipes() }
             .map(State.success)
+            .prepend(.loading)
             .catch { Just(State.failure($0)) }
             .receive(on: RunLoop.main)
             .assign(to: \.state, on: self)
@@ -53,6 +55,7 @@ class RecipeStore {
         service.update(recipe: recipe, name: name, ingredients: ingredients, image: image?.pngData(), notes: notes)
             .flatMap { [unowned self] in self.service.fetchRecipes() }
             .map(State.success)
+            .prepend(.loading)
             .catch { Just(State.failure($0)) }
             .receive(on: RunLoop.main)
             .assign(to: \.state, on: self)
