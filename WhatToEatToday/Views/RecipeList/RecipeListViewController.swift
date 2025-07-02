@@ -23,16 +23,30 @@ class RecipeListViewController: BaseViewController {
     
     let recipeCellName = "RecipeCell"
     
+    let viewModel: RecipeListViewModel
+
+    var onSelectRecipe: ((Recipe) -> Void)?
+    
     private var recipes = [Recipe]()
     private var cancellables = Set<AnyCancellable>()
+    
+    init(viewModel: RecipeListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
+        title = "Recipes"
         setupTableView()
         setupViewModelBinding()
         toggleNavigationLeftBarItem()
+        viewModel.fetchRecipes()
     }
     
     private func setupTableView() {
@@ -40,7 +54,6 @@ class RecipeListViewController: BaseViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(RecipeCell.self, forCellReuseIdentifier: recipeCellName)
-        tableView.backgroundView = loadingIndicator
         tableView.pin(to: view)
     }
     
@@ -53,11 +66,12 @@ class RecipeListViewController: BaseViewController {
             .store(in: &cancellables)
     }
     
-    private func handleState(_ state: State) {
+    private func handleState(_ state: State<[Recipe]>) {
         switch state {
         case .idle:
             break
         case .loading:
+            self.tableView.backgroundView = loadingIndicator
             loadingIndicator.startAnimating()
         case .success(let recipes):
             loadingIndicator.stopAnimating()
@@ -70,6 +84,7 @@ class RecipeListViewController: BaseViewController {
             }
             toggleNavigationLeftBarItem()
         case .failure(let error):
+            loadingIndicator.stopAnimating()
             print("Error fetching from data: \(error.localizedDescription)")
         }
     }
@@ -95,7 +110,7 @@ class RecipeListViewController: BaseViewController {
 extension RecipeListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        show(RecipeDetailViewController(recipe: recipes[indexPath.row], viewModel: viewModel), sender: self)
+        onSelectRecipe?(recipes[indexPath.row])
     }
 }
 

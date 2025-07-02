@@ -5,9 +5,10 @@
 //  Created by Howard tsai on 2024-07-28.
 //
 
+import Combine
 import UIKit
 
-class RecipeNotesCell: UITableViewCell, UITextViewDelegate, EditableCell {
+class RecipeNotesCell: UITableViewCell, UITextViewDelegate {
     
     static let identifier = "RecipeNotesCell"
     
@@ -22,8 +23,18 @@ class RecipeNotesCell: UITableViewCell, UITextViewDelegate, EditableCell {
         return textView
     }()
     
-    weak var delegate: TextFieldCellDelegate?
+    lazy var textPublisher: AnyPublisher<String, Never> = {
+        NotificationCenter.default
+            .publisher(for: UITextView.textDidChangeNotification, object: notesView)
+            .compactMap {
+                let text = ($0.object as? UITextView)?.text
+                return text
+            }
+            .eraseToAnyPublisher()
+    }()
 
+    private var cancellables = Set<AnyCancellable>()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -53,10 +64,39 @@ class RecipeNotesCell: UITableViewCell, UITextViewDelegate, EditableCell {
         notesView.layer.borderColor = UIColor.black.cgColor
         notesView.layer.masksToBounds = true
     }
+    
+    func bind(to viewModel: RecipeFormViewModel) {
+        // Emits the text and assign to view model (UI -> VM)
+        textPublisher
+            .receive(on: RunLoop.main)
+            .sink { [weak viewModel] text in
+                viewModel?.draft.recipeNotes = text
+            }
+            .store(in: &cancellables)
+        
+        viewModel.draft.$recipeNotes
+            .receive(on: RunLoop.main)
+            .sink { [weak self] newNotes in
+                if newNotes.isEmpty {
+                    self?.notesView.text = self?.placeHolderText
+                } else if self?.notesView.text != newNotes {
+                    self?.notesView.text = newNotes
+                }
+            }
+            .store(in: &cancellables)
+
+        // Toggles the editable state based on view model (VM -> UI)
+        viewModel.$isEditable
+            .receive(on: RunLoop.main)
+            .sink { [weak self] editable in
+                self?.setEditable(editable)
+            }
+            .store(in: &cancellables)
+    }
 
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == placeHolderText {
-            textView.text = nil
+            textView.text = ""
         }
     }
     
@@ -77,15 +117,8 @@ class RecipeNotesCell: UITableViewCell, UITextViewDelegate, EditableCell {
         if textView.text.isEmpty {
             textView.text = placeHolderText
         }
-        if textView.text != placeHolderText {
-            delegate?.textDidChange(for: .notes, text: textView.text)
-        }
     }
-    
-    func configure(with text: String?) {
-        notesView.text = text
-    }
-    
+
     func setEditable(_ editable: Bool) {
         notesView.isEditable = editable
         notesView.backgroundColor = editable ? .systemBackground : .systemGray6

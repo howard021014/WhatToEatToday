@@ -14,28 +14,19 @@ struct IngredientData {
     var unit = ""
 }
 
-class RecipeBaseTableViewController: UITableViewController {
+class RecipeFormViewController: UITableViewController {
 
-    let viewModel: RecipeViewModel
-    
-    @Published var isEditable: Bool
-    
-    var ingredientData = [IngredientData]()
-    var recipeName: String?
-    var recipeNotes: String?
-    var recipeImage: UIImage?
-    
+    let viewModel: RecipeFormViewModel
+
     private var cancellables = Set<AnyCancellable>()
-    private weak var headerView: UITableViewHeaderFooterView?
-    private weak var addIngredientButton: UIButton?
+    private var addIngredientButton: UIButton?
     
     enum TableSection: Int {
         case image, name, ingredients, notes
     }
     
-    init(viewModel: RecipeViewModel, isEditable: Bool = true) {
+    init(viewModel: RecipeFormViewModel) {
         self.viewModel = viewModel
-        self.isEditable = isEditable
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -45,9 +36,13 @@ class RecipeBaseTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        title = viewModel.mode == .create ? "Create your Recipe" : "Recipe Details"
+        setupNavBar()
         setupTableView()
+        setupViewModelBindings()
+        setupTapRecognizer()
         registerCells()
-        setupFinishEditing()
     }
     
     private func setupTableView() {
@@ -56,10 +51,61 @@ class RecipeBaseTableViewController: UITableViewController {
         tableView.allowsSelection = false
     }
     
-    private func setupFinishEditing() {
+    private func setupTapRecognizer() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(finishEditing))
         tap.cancelsTouchesInView = false
         tableView.addGestureRecognizer(tap)
+    }
+    
+    private func setupNavBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: viewModel.isEditable ? "Save" : "Edit",
+            style: .plain,
+            target: self,
+            action: #selector(saveOrUpdate)
+        )
+        
+        if viewModel.isEditable && viewModel.mode != .create {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(
+                title: "Cancel",
+                style: .plain,
+                target: self,
+                action: #selector(cancel)
+            )
+        }
+    }
+    
+    private func updateNavBarItems(for editable: Bool) {
+        navigationItem.rightBarButtonItem?.title = editable ? "Save" : "Edit"
+        
+        if editable && viewModel.mode != .create {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(
+                title: "Cancel",
+                style: .plain,
+                target: self,
+                action: #selector(cancel)
+            )
+        } else {
+            navigationItem.leftBarButtonItem = nil
+        }
+    }
+    
+    private func setupViewModelBindings() {
+        viewModel.$isEditable
+            .receive(on: RunLoop.main)
+            .sink { [weak self] editable in
+                self?.tableView.reloadData()
+                self?.updateNavBarItems(for: editable)
+                self?.toggleIngredientButtonVisibility(editable)
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$isValid
+            .receive(on: RunLoop.main)
+            .sink { [weak self] isValid in
+                self?.navigationItem.rightBarButtonItem?.isEnabled = isValid
+            }
+            .store(in: &cancellables)
     }
     
     private func registerCells() {
@@ -67,7 +113,6 @@ class RecipeBaseTableViewController: UITableViewController {
         tableView.register(RecipeNameCell.self, forCellReuseIdentifier: RecipeNameCell.identifier)
         tableView.register(RecipeNotesCell.self, forCellReuseIdentifier: RecipeNotesCell.identifier)
         tableView.register(IngredientCell.self, forCellReuseIdentifier: IngredientCell.identifier)
-        tableView.register(IngredientsHeaderView.self, forHeaderFooterViewReuseIdentifier: IngredientsHeaderView.identifier)
     }
     
     func showImagePicker() {
@@ -84,6 +129,24 @@ class RecipeBaseTableViewController: UITableViewController {
     private func finishEditing() {
         view.endEditing(true)
     }
+    
+    @objc
+    private func saveOrUpdate() {
+        if viewModel.isEditable {
+            finishEditing()
+            viewModel.saveOrUpdate()
+            dismiss(animated: true)
+        }
+        viewModel.toggleEditing()
+    }
+    
+    @objc
+    private func cancel() {
+        finishEditing()
+        viewModel.cancelEdit()
+        tableView.reloadData()
+        dismiss(animated: true)
+    }
 
     // MARK: - UITableViewDataSource
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -95,7 +158,7 @@ class RecipeBaseTableViewController: UITableViewController {
         case .image, .name, .notes:
             return 1
         case .ingredients:
-            return ingredientData.count
+            return viewModel.draft.ingredients.count
         default:
             return 0
         }
@@ -121,21 +184,12 @@ class RecipeBaseTableViewController: UITableViewController {
             return UITableViewCell()
         }
         
-        cell.configure(with: recipeImage)
-        
-        $isEditable
-            .receive(on: RunLoop.main)
-            .sink { [weak cell] editable in
-                cell?.setEditable(editable)
-            }
-            .store(in: &cancellables)
-        
-        // Initial state
-        cell.setEditable(isEditable)
-        
+        cell.bind(to: viewModel)
+
         cell.onUploadButtonTapped = { [weak self] in
             self?.showImagePicker()
         }
+
         return cell
     }
     
@@ -143,20 +197,8 @@ class RecipeBaseTableViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: RecipeNameCell.identifier, for: indexPath) as? RecipeNameCell else {
             return UITableViewCell()
         }
-        
-        cell.configure(with: recipeName)
 
-        $isEditable
-            .receive(on: RunLoop.main)
-            .sink { [weak cell] editable in
-                cell?.setEditable(editable)
-            }
-            .store(in: &cancellables)
-        
-        // Initial state
-        cell.setEditable(isEditable)
-        
-        cell.delegate = self
+        cell.bind(to: viewModel)
         return cell
     }
     
@@ -165,22 +207,7 @@ class RecipeBaseTableViewController: UITableViewController {
             return UITableViewCell()
         }
 
-        cell.configure(with: ingredientData[indexPath.row])
-
-        $isEditable
-            .receive(on: RunLoop.main)
-            .sink { [weak cell] editable in
-                cell?.setEditable(editable)
-            }
-            .store(in: &cancellables)
-        
-        // Initial state
-        cell.setEditable(isEditable)
-        
-        
-        cell.onIngredientDataUpdate = { [weak self] updatedData in
-            self?.ingredientData[indexPath.row] = updatedData
-        }
+        cell.bind(to: viewModel, at: indexPath)
         return cell
     }
     
@@ -189,19 +216,7 @@ class RecipeBaseTableViewController: UITableViewController {
             return UITableViewCell()
         }
         
-        cell.configure(with: recipeNotes)
-
-        $isEditable
-            .receive(on: RunLoop.main)
-            .sink { [weak cell] editable in
-                cell?.setEditable(editable)
-            }
-            .store(in: &cancellables)
-        
-        // Initial state
-        cell.setEditable(isEditable)
-
-        cell.delegate = self
+        cell.bind(to: viewModel)
         return cell
     }
     
@@ -247,26 +262,24 @@ class RecipeBaseTableViewController: UITableViewController {
         if case .ingredients = TableSection(rawValue: section) {
             // Get the default header view
             let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") ?? UITableViewHeaderFooterView(reuseIdentifier: "header")
-
-            self.headerView = headerView
             
             // Add a button to the header view
-            let addButton = UIButton(type: .system)
-            addButton.translatesAutoresizingMaskIntoConstraints = false
-            addButton.setImage(UIImage(systemName: "plus")!, for: .normal)
-            addButton.tag = section
-            addButton.addTarget(self, action: #selector(addNewIngredientRow(_:)), for: .touchUpInside)
-            
-            addButton.isHidden = !isEditable
-            self.addIngredientButton = addButton
+            if addIngredientButton == nil {
+                let addButton = UIButton(type: .system)
+                addButton.translatesAutoresizingMaskIntoConstraints = false
+                addButton.setImage(UIImage(systemName: "plus")!, for: .normal)
+                addButton.tag = section
+                addButton.addTarget(self, action: #selector(addNewIngredientRow(_:)), for: .touchUpInside)
 
-            headerView.contentView.addSubview(addButton)
-            NSLayoutConstraint.activate([
-                addButton.trailingAnchor.constraint(equalTo: headerView.contentView.trailingAnchor, constant: -10),
-                addButton.centerYAnchor.constraint(equalTo: headerView.contentView.centerYAnchor),
-                addButton.heightAnchor.constraint(equalToConstant: 18.0),
-                addButton.widthAnchor.constraint(equalToConstant: 18.0)
-            ])
+                headerView.contentView.addSubview(addButton)
+                NSLayoutConstraint.activate([
+                    addButton.trailingAnchor.constraint(equalTo: headerView.contentView.trailingAnchor, constant: -10),
+                    addButton.centerYAnchor.constraint(equalTo: headerView.contentView.centerYAnchor),
+                    addButton.heightAnchor.constraint(equalToConstant: 18.0),
+                    addButton.widthAnchor.constraint(equalToConstant: 18.0)
+                ])
+                self.addIngredientButton = addButton
+            }
 
             return headerView
         }
@@ -280,7 +293,7 @@ class RecipeBaseTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             tableView.performBatchUpdates {
-                ingredientData.remove(at: indexPath.row)
+                viewModel.draft.ingredients.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
             }
         }
@@ -290,29 +303,20 @@ class RecipeBaseTableViewController: UITableViewController {
     private func addNewIngredientRow(_ sender: UIButton) {
         let section = sender.tag
         tableView.performBatchUpdates {
-            ingredientData.append(IngredientData())
-            tableView.insertRows(at: [IndexPath(row: ingredientData.count - 1, section: section)], with: .automatic)
+            viewModel.draft.ingredients.append(IngredientData())
+            tableView.insertRows(at: [IndexPath(row: viewModel.draft.ingredients.count - 1, section: section)], 
+                                 with: .automatic)
         }
     }
-
-    func updateAddIngredientButtonVisibility(_ isEditable: Bool) {
-        addIngredientButton?.isHidden = !isEditable
-    }
-}
-
-extension RecipeBaseTableViewController: TextFieldCellDelegate {
-    func textDidChange(for view: TextFieldTag, text: String?) {
-        switch view {
-        case .name:
-            recipeName = text
-        case .notes:
-            recipeNotes = text
-        }
+    
+    private func toggleIngredientButtonVisibility(_ editable: Bool) {
+        self.addIngredientButton?.isEnabled = editable
+        self.addIngredientButton?.isUserInteractionEnabled = editable
     }
 }
 
 // MARK: - PHPickerViewControllerDelegate
-extension RecipeBaseTableViewController: PHPickerViewControllerDelegate {
+extension RecipeFormViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
         
@@ -321,8 +325,9 @@ extension RecipeBaseTableViewController: PHPickerViewControllerDelegate {
         result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (object, error) in
             if let image = object as? UIImage {
                 DispatchQueue.main.async {
-                    self?.recipeImage = image
-                    self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+                    self?.viewModel.draft.recipeImage = image
+                    self?.tableView.reloadRows(at: [IndexPath(row: 0, section: TableSection.image.rawValue)], 
+                                               with: .automatic)
                 }
             }
         }

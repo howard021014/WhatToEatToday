@@ -5,27 +5,34 @@
 //  Created by Howard tsai on 2024-04-25.
 //
 
+import Combine
 import UIKit
 
-protocol IngredientDataDelegate: AnyObject {
-    func saveIngredient(name: String, unit: String)
-}
-
-class IngredientCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, EditableCell {
-
+class IngredientCell: UITableViewCell {
+    
     static let identifier = "IngredientCell"
-    var ingredientData = IngredientData()
-    var viewing: Bool = false
-    var onIngredientDataUpdate: ((IngredientData) -> Void)?
 
-    let collectionView: UICollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .horizontal
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.isScrollEnabled = false
-        return collectionView
+    let nameTextField: PaddedTextField = {
+        let textField = PaddedTextField(padding: .init(top: 0, left: 10, bottom: 0, right: 0))
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.font = .systemFont(ofSize: 14, weight: .bold)
+        textField.placeholder = "Ingredient Name"
+        return textField
     }()
+    
+    let unitTextField: PaddedTextField = {
+        let textField = PaddedTextField(padding: .init(top: 0, left: 10, bottom: 0, right: 0))
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.font = .systemFont(ofSize: 14, weight: .bold)
+        textField.placeholder = "Unit"
+        return textField
+    }()
+    
+    let paddingHorizontal: CGFloat = 10
+    let paddingVertical: CGFloat = 5
+    let interItemSpacing: CGFloat = 10
+    
+    private var cancellables = Set<AnyCancellable>()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -36,76 +43,62 @@ class IngredientCell: UITableViewCell, UICollectionViewDataSource, UICollectionV
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupUI() {
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(IngredientCollectionViewCell.self, forCellWithReuseIdentifier: IngredientCollectionViewCell.identifier)
-        
-        contentView.addSubview(collectionView)
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cancellables.removeAll()
+    }
+    
+    private func setupUI() {
+        contentView.addSubview(nameTextField)
+        contentView.addSubview(unitTextField)
+
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
-            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
-            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10)
+            // Ingredient name text field constraints
+            nameTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: paddingVertical),
+            nameTextField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -paddingVertical),
+            nameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: paddingHorizontal),
+            nameTextField.trailingAnchor.constraint(equalTo: unitTextField.leadingAnchor, constant: -interItemSpacing),
+            
+            // Ingredient unit text field constraints
+            unitTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: paddingVertical),
+            unitTextField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -paddingVertical),
+            unitTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -paddingHorizontal),
+            
+            nameTextField.widthAnchor.constraint(equalTo: unitTextField.widthAnchor, multiplier: 2.0),
         ])
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientCollectionViewCell.identifier, for: indexPath) as? IngredientCollectionViewCell {
-            
-            cell.setEditable(!viewing)
-            
-            if indexPath.item == 0 {
-                cell.configure(with: ingredientData.name)
-                if !viewing {
-                    cell.textField.placeholder = "Item Name"
-                }
-            } else {
-                cell.configure(with: ingredientData.unit)
-                if !viewing {
-                    cell.textField.placeholder = "Unit"
-                }
+    func bind(to viewModel: RecipeFormViewModel, at indexPath: IndexPath) {
+        // Combine both textfield publisher and map to actual data object
+        Publishers.CombineLatest(nameTextField.textDidChangePublisher, unitTextField.textDidChangePublisher)
+            .map { name, unit in
+                IngredientData(name: name, unit: unit)
             }
-            
-            if !viewing {
-                cell.onTextChange = { [weak self] text in
-                    print("HT ---- Text changed: \(text) at \(indexPath.item) at row: \(indexPath.row)")
-                    if indexPath.item == 0 {
-                        self?.ingredientData.name = text
-                    } else {
-                        self?.ingredientData.unit = text
-                    }
-                    self?.onIngredientDataUpdate?(self?.ingredientData ?? IngredientData())
-                }
+            .receive(on: RunLoop.main)
+            .sink { [weak viewModel] data in
+                viewModel?.draft.ingredients[indexPath.row] = data
             }
-
-            return cell
-        }
+            .store(in: &cancellables)
         
-        return UICollectionViewCell()
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.bounds.width - 10
-        if indexPath.item == 0 {
-            return CGSize(width: width * 2 / 3, height: collectionView.bounds.height)
-        } else {
-            return CGSize(width: width / 3, height: collectionView.bounds.height)
-        }
-    }
-    
-    func configure(with ingredientData: IngredientData) {
-        viewing = true
-        self.ingredientData = ingredientData
-        collectionView.reloadData()
-    }
-    
-    func setEditable(_ editable: Bool) {
-        viewing = !editable
-        collectionView.reloadData()
+        // Update textfield with new text
+        viewModel.draft.$ingredients
+            .receive(on: RunLoop.main)
+            .sink { [weak self] ingredientData in
+                // Make sure that the data does not go index out of bounds because the original copy will be 1 less than the newly added row
+                // this happens when user adds a row and then decides to cancel
+                if indexPath.row < ingredientData.count {
+                    self?.nameTextField.text = ingredientData[indexPath.row].name
+                    self?.unitTextField.text = ingredientData[indexPath.row].unit
+                }
+            }
+            .store(in: &cancellables)
+
+        viewModel.$isEditable
+            .receive(on: RunLoop.main)
+            .sink { [weak self] isEditable in
+                self?.nameTextField.setEditable(isEditable)
+                self?.unitTextField.setEditable(isEditable)
+            }
+            .store(in: &cancellables)
     }
 }

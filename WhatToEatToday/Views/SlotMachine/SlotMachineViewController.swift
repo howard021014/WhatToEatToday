@@ -24,6 +24,17 @@ class SlotMachineViewController: BaseViewController {
         return view
     }()
    
+    let viewModel: SlotMachineViewModel
+    
+    init(viewModel: SlotMachineViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     var slotView: SlotMachineView?
     
     override func viewDidLoad() {
@@ -45,7 +56,7 @@ class SlotMachineViewController: BaseViewController {
             .store(in: &cancellables)
     }
     
-    private func handleState(_ state: State) {
+    private func handleState(_ state: State<[Recipe]>) {
         switch state {
         case .idle:
             break
